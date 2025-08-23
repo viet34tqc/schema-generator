@@ -1,0 +1,26 @@
+import { commonProperties } from './commonProperties';
+
+export default [
+  {
+    id: 'googleDocs',
+    type: 'GoogleDocs',
+    url: 'https://developers.google.com/search/docs/advanced/structured-data/job-posting',
+    show: true,
+  },
+  commonProperties.context,
+  commonProperties.type('JobPosting'),
+  commonProperties.id,
+  {
+    id: 'title',
+    label: 'Title',
+    required: true,
+    std: '{{ post.title }}',
+    tooltip: 'The title of the job (not the title of the posting).',
+  },
+  {
+    ...commonProperties.description,
+    required: true,
+    tooltip: 'A description of the job.',
+  },
+  // TODO: Add more job posting specific fields
+];
