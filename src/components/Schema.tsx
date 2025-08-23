@@ -1,8 +1,9 @@
-import { ExternalLink, Trash2 } from 'lucide-react'
+import { ChevronDown, ChevronRight, ExternalLink, Trash2 } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { useSchemaLinks } from '../contexts/SchemaLinkContext'
-import { SchemaField, Schema as SchemaType } from '../types/schema'
-import { __, get, request } from '../utils/functions'
+import { Schema as SchemaType } from '../types/schema'
+import { __, get } from '../utils/functions'
+import { localStorageApi } from '../utils/localStorage'
 import { formatJsonLdForDisplay, renderSchemaAsJsonLd } from '../utils/schemaRenderer'
 import SchemaTypeComponent from './SchemaType'
 import { Badge } from './ui/badge'
@@ -32,19 +33,20 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id, setSchemas }) =
   const { addToast } = useToast()
   const [documentationUrl, setDocumentationUrl] = useState<string | null>(null)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(true)
 
   // Load schema fields to find documentation URL
   useEffect(() => {
-    const loadDocumentationUrl = async () => {
+    const loadDocumentationUrl = () => {
       try {
-        const fieldData = await request('types', { type: schema.type })
+        const fieldData = localStorageApi.getSchemaFieldDefinitions(schema.type)
         if (fieldData && Array.isArray(fieldData)) {
           const docsField = fieldData.find(
-            (field: SchemaField) =>
+            (field: any) =>
               (field.type === 'SchemaDocs' || field.type === 'GoogleDocs') && field.url,
           )
-          if (docsField) {
-            setDocumentationUrl(docsField.url)
+          if (docsField && (docsField as any).url) {
+            setDocumentationUrl((docsField as any).url)
           }
         }
       } catch (error) {
@@ -94,7 +96,17 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id, setSchemas }) =
       <Card>
         <CardHeader>
           <div className='flex items-center justify-between'>
-            <div className='flex items-center space-x-3'>
+            <div
+              className='flex items-center space-x-3 cursor-pointer flex-1'
+              onClick={() => setIsExpanded(!isExpanded)}
+            >
+              <Button variant='ghost' size='icon' className='h-6 w-6'>
+                {isExpanded ? (
+                  <ChevronDown className='h-4 w-4' />
+                ) : (
+                  <ChevronRight className='h-4 w-4' />
+                )}
+              </Button>
               <h3 className='text-lg font-medium'>{schemaLabel}</h3>
               <Badge variant='secondary'>{schema.type}</Badge>
             </div>
@@ -124,41 +136,43 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id, setSchemas }) =
           </div>
         </CardHeader>
 
-        <CardContent>
-          <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6'>
-            {/* Schema Fields Column */}
-            <div className='space-y-4'>
-              <h3 className='text-lg font-semibold'>{__('Schema Properties')}</h3>
-              <SchemaTypeComponent schema={schema} updateSchema={updateSchema} schemaId={id} />
-            </div>
+        {isExpanded && (
+          <CardContent>
+            <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6'>
+              {/* Schema Fields Column */}
+              <div className='space-y-4'>
+                <h3 className='text-lg font-semibold'>{__('Schema Properties')}</h3>
+                <SchemaTypeComponent schema={schema} updateSchema={updateSchema} schemaId={id} />
+              </div>
 
-            {/* Live JSON-LD Preview Column */}
-            <div className='space-y-4'>
-              <h3 className='text-lg font-semibold'>{__('Live JSON-LD Preview')}</h3>
-              <div className='bg-muted border rounded-lg p-4'>
-                <pre className='text-sm overflow-auto max-h-96 text-foreground'>
-                  <code>{generateLiveJsonLd(schema, id)}</code>
-                </pre>
-                <div className='mt-3 flex justify-end'>
-                  <Button
-                    variant='outline'
-                    size='sm'
-                    onClick={() => {
-                      const jsonLd = generateLiveJsonLd(schema, id)
-                      navigator.clipboard.writeText(jsonLd)
-                      addToast({
-                        title: __('JSON-LD copied to clipboard!'),
-                        variant: 'success',
-                      })
-                    }}
-                  >
-                    {__('Copy JSON-LD')}
-                  </Button>
+              {/* Live JSON-LD Preview Column */}
+              <div className='space-y-4'>
+                <h3 className='text-lg font-semibold'>{__('Live JSON-LD Preview')}</h3>
+                <div className='bg-muted border rounded-lg p-4'>
+                  <pre className='text-sm overflow-auto max-h-96 text-foreground'>
+                    <code>{generateLiveJsonLd(schema, id)}</code>
+                  </pre>
+                  <div className='mt-3 flex justify-end'>
+                    <Button
+                      variant='outline'
+                      size='sm'
+                      onClick={() => {
+                        const jsonLd = generateLiveJsonLd(schema, id)
+                        navigator.clipboard.writeText(jsonLd)
+                        addToast({
+                          title: __('JSON-LD copied to clipboard!'),
+                          variant: 'success',
+                        })
+                      }}
+                    >
+                      {__('Copy JSON-LD')}
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </CardContent>
+          </CardContent>
+        )}
       </Card>
 
       <ConfirmationDialog

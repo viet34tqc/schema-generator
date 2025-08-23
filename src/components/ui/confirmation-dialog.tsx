@@ -1,5 +1,5 @@
-import React from 'react'
 import { AlertTriangle } from 'lucide-react'
+import React from 'react'
 import { __ } from '../../utils/functions'
 import { Button } from './button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './dialog'
@@ -36,29 +36,28 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <div className="flex items-center space-x-3">
+      <DialogContent className='sm:max-w-md'>
+        <DialogHeader className='text-left'>
+          <DialogTitle className='flex items-center space-x-3 text-lg font-semibold'>
             {variant === 'destructive' && (
-              <div className="flex-shrink-0">
-                <AlertTriangle className="h-6 w-6 text-destructive" />
-              </div>
+              <AlertTriangle className='h-5 w-5 text-destructive flex-shrink-0' />
             )}
-            <div>
-              <DialogTitle>{title}</DialogTitle>
-              {description && (
-                <p className="mt-2 text-sm text-muted-foreground">{description}</p>
-              )}
+            <span>{title}</span>
+          </DialogTitle>
+          {description && (
+            <div className='mt-3'>
+              <p className='text-sm text-muted-foreground leading-relaxed'>{description}</p>
             </div>
-          </div>
+          )}
         </DialogHeader>
-        <div className="flex justify-end space-x-3 mt-6">
-          <Button variant="outline" onClick={handleCancel}>
+        <div className='flex justify-end space-x-3 mt-6 pt-4 border-t border-border'>
+          <Button variant='outline' onClick={handleCancel} className='min-w-[80px]'>
             {cancelText}
           </Button>
           <Button
             variant={variant === 'destructive' ? 'destructive' : 'default'}
             onClick={handleConfirm}
+            className='min-w-[80px]'
           >
             {confirmText}
           </Button>

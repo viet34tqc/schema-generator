@@ -1,15 +1,14 @@
-import { commonProperties } from './commonProperties';
+import { commonProperties } from './commonProperties'
 
 export default [
   {
     id: 'googleDocs',
     type: 'GoogleDocs',
     url: 'https://developers.google.com/search/docs/advanced/structured-data/recipe',
-    show: true,
+    show: false,
   },
   commonProperties.context,
   commonProperties.type('Recipe'),
-  commonProperties.id,
   {
     ...commonProperties.name,
     required: true,
@@ -73,12 +72,14 @@ export default [
   {
     id: 'totalTime',
     label: 'Total time',
-    tooltip: 'The total time required to perform instructions or a direction, in ISO 8601 duration format.',
+    tooltip:
+      'The total time required to perform instructions or a direction, in ISO 8601 duration format.',
   },
   {
     id: 'recipeYield',
     label: 'Recipe yield',
-    tooltip: 'The quantity produced by the recipe (for example, number of people served, number of servings, etc).',
+    tooltip:
+      'The quantity produced by the recipe (for example, number of people served, number of servings, etc).',
   },
   {
     id: 'recipeCategory',
@@ -114,4 +115,4 @@ export default [
       },
     ],
   },
-];
+]

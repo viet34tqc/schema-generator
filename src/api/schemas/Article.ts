@@ -1,11 +1,11 @@
-import { commonProperties } from './commonProperties';
+import { commonProperties } from './commonProperties'
 
 export default [
   {
     id: 'googleDocs',
     type: 'GoogleDocs',
     url: 'https://developers.google.com/search/docs/advanced/structured-data/article',
-    show: true,
+    show: false,
   },
   commonProperties.context,
   {
@@ -15,14 +15,13 @@ export default [
     required: true,
     std: 'Article',
     options: {
-      'Article': 'Article',
-      'BlogPosting': 'Blog Posting',
-      'NewsArticle': 'News Article',
-      'ScholarlyArticle': 'Scholarly Article',
-      'TechArticle': 'Tech Article',
+      Article: 'Article',
+      BlogPosting: 'Blog Posting',
+      NewsArticle: 'News Article',
+      ScholarlyArticle: 'Scholarly Article',
+      TechArticle: 'Tech Article',
     },
   },
-  commonProperties.id,
   {
     ...commonProperties.headline,
     required: true,
@@ -66,4 +65,4 @@ export default [
     std: '{{ post.content }}',
     tooltip: 'The actual body of the article.',
   },
-];
+]

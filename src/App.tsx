@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import ImportExport from './components/ImportExport'
 import Schemas from './components/Schemas'
 import ThemeToggle from './components/ThemeToggle'
@@ -8,26 +7,6 @@ import { SchemaLinkProvider } from './contexts/SchemaLinkContext'
 import { ThemeProvider } from './contexts/ThemeContext'
 
 function App() {
-  useEffect(() => {
-    // Prevent form submission on Enter key press (like the original WordPress plugin)
-    const handleKeyPress = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement
-      if (e.keyCode === 13 && target.tagName === 'INPUT') {
-        e.preventDefault()
-      }
-    }
-
-    document.addEventListener('keypress', handleKeyPress)
-    document.addEventListener('keydown', handleKeyPress)
-    document.addEventListener('keyup', handleKeyPress)
-
-    return () => {
-      document.removeEventListener('keypress', handleKeyPress)
-      document.removeEventListener('keydown', handleKeyPress)
-      document.removeEventListener('keyup', handleKeyPress)
-    }
-  }, [])
-
   return (
     <ThemeProvider>
       <ToastProvider>

@@ -1,46 +1,47 @@
-import React, { useEffect, useState } from 'react';
-import { Loader2 } from 'lucide-react';
-import { request, get, __ } from '../utils/functions';
-import { Schema, SchemaField } from '../types/schema';
-import Property from './Property';
-import Panel from './Panel';
+import { Loader2 } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
+import { Schema, SchemaField } from '../types/schema'
+import { __, get } from '../utils/functions'
+import { localStorageApi } from '../utils/localStorage'
+import Panel from './Panel'
+import Property from './Property'
 
 interface SchemaTypeProps {
-  schema: Schema;
-  updateSchema: (path: string, value: any) => void;
-  schemaId: string;
+  schema: Schema
+  updateSchema: (path: string, value: any) => void
+  schemaId: string
 }
 
 const SchemaType: React.FC<SchemaTypeProps> = ({ schema, updateSchema, schemaId }) => {
-  const [fields, setFields] = useState<SchemaField[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [fields, setFields] = useState<SchemaField[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const loadFields = async () => {
-      setIsLoading(true);
+    const loadFields = () => {
+      setIsLoading(true)
       try {
-        const fieldData = await request('types', { type: schema.type });
-        setFields(fieldData || []);
+        const fieldData = localStorageApi.getSchemaFieldDefinitions(schema.type)
+        setFields(fieldData || [])
       } catch (error) {
-        console.error('Error loading schema fields:', error);
-        setFields([]);
+        console.error('Error loading schema fields:', error)
+        setFields([])
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
-    };
+    }
 
     if (schema.type) {
-      loadFields();
+      loadFields()
     }
-  }, [schema.type]);
+  }, [schema.type])
 
   const handleFieldChange = (fieldId: string, value: any) => {
-    updateSchema(`fields.${fieldId}`, value);
-  };
+    updateSchema(`fields.${fieldId}`, value)
+  }
 
   const renderField = (field: SchemaField) => {
-    const fieldValue = get(schema, `fields.${field.id}`, field.std || '');
-    
+    const fieldValue = get(schema, `fields.${field.id}`, field.std || '')
+
     return (
       <Property
         key={field.id}
@@ -49,74 +50,69 @@ const SchemaType: React.FC<SchemaTypeProps> = ({ schema, updateSchema, schemaId 
         onChange={(value) => handleFieldChange(field.id, value)}
         schemaId={schemaId}
       />
-    );
-  };
+    )
+  }
 
   const renderFieldGroup = (fields: SchemaField[], title?: string) => {
-    if (!fields.length) return null;
+    if (!fields.length) return null
 
-    const content = (
-      <div className="space-y-4">
-        {fields.map(renderField)}
-      </div>
-    );
+    const content = <div className='space-y-4'>{fields.map(renderField)}</div>
 
     if (title) {
       return (
         <Panel title={title} key={title}>
           {content}
         </Panel>
-      );
+      )
     }
 
-    return content;
-  };
+    return content
+  }
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-8">
-        <Loader2 className="h-6 w-6 animate-spin" />
-        <span className="ml-2 text-sm text-muted-foreground">
-          {__('Loading schema fields...')}
-        </span>
+      <div className='flex items-center justify-center py-8'>
+        <Loader2 className='h-6 w-6 animate-spin' />
+        <span className='ml-2 text-sm text-muted-foreground'>{__('Loading schema fields...')}</span>
       </div>
-    );
+    )
   }
 
   if (!fields.length) {
     return (
-      <div className="text-center py-8">
-        <p className="text-muted-foreground">
-          {__('No fields available for this schema type.')}
-        </p>
+      <div className='text-center py-8'>
+        <p className='text-muted-foreground'>{__('No fields available for this schema type.')}</p>
       </div>
-    );
+    )
   }
 
   // Group fields by their group property or render them flat
-  const groupedFields = fields.reduce((groups, field) => {
-    const group = field.group || 'main';
-    if (!groups[group]) {
-      groups[group] = [];
-    }
-    groups[group].push(field);
-    return groups;
-  }, {} as Record<string, SchemaField[]>);
+  const groupedFields = fields.reduce(
+    (groups, field) => {
+      const group = field.group || 'main'
+      if (!groups[group]) {
+        groups[group] = []
+      }
+      groups[group].push(field)
+      return groups
+    },
+    {} as Record<string, SchemaField[]>,
+  )
 
   // If there's only a main group, render fields without grouping
   if (Object.keys(groupedFields).length === 1 && groupedFields.main) {
-    return renderFieldGroup(groupedFields.main);
+    return renderFieldGroup(groupedFields.main)
   }
 
   // Render grouped fields
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {Object.entries(groupedFields).map(([groupName, groupFields]) => {
-        const title = groupName === 'main' ? undefined : groupName;
-        return renderFieldGroup(groupFields, title);
+        const title = groupName === 'main' ? undefined : groupName
+        return renderFieldGroup(groupFields, title)
       })}
     </div>
-  );
-};
+  )
+}
 
-export default SchemaType;
+export default SchemaType

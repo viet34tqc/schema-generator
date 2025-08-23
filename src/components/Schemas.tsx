@@ -3,7 +3,8 @@ import { useContext, useEffect, useState } from 'react'
 import { useImmer } from 'use-immer'
 import { SchemaLinkContext } from '../contexts/SchemaLinkContext'
 import { Schema, SchemaType as SchemaTypeData } from '../types/schema'
-import { __, request, uniqueID } from '../utils/functions'
+import { __, uniqueID } from '../utils/functions'
+import { localStorageApi } from '../utils/localStorage'
 import Inserter from './Inserter'
 import SchemaComponent from './Schema'
 import { Button } from './ui/button'
@@ -20,11 +21,20 @@ const Schemas = () => {
   const { addSchemaLink, removeSchemaLink } = context
 
   useEffect(() => {
-    request('data', { type: 'schemas' }).then(setItems)
+    // Force refresh schema types to ensure new structure is loaded
+    localStorageApi.refreshSchemaTypes()
+
+    // Load schema types
+    const schemaTypes = localStorageApi.getSchemaTypes()
+    setItems(schemaTypes)
   }, [])
 
   useEffect(() => {
-    request('schemas').then((data) => data && setSchemas(data))
+    // Load schemas
+    const data = localStorageApi.getSchemas()
+    if (data) {
+      setSchemas(data)
+    }
   }, [setSchemas])
 
   const addSchema = (e: React.MouseEvent<HTMLButtonElement>, onToggle: () => void) =>
@@ -38,12 +48,16 @@ const Schemas = () => {
 
       draft[id] = newSchema
       addSchemaLink(id, newSchema)
+      // Save to localStorage
+      localStorageApi.saveSchemas(draft)
     })
 
   const deleteSchema = (id: string) =>
     setSchemas((draft) => {
       delete draft[id]
       removeSchemaLink(id)
+      // Save to localStorage
+      localStorageApi.saveSchemas(draft)
     })
 
   const hasSchemas = Object.keys(schemas).length > 0

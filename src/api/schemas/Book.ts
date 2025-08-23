@@ -1,18 +1,14 @@
-import { commonProperties } from './commonProperties';
+import { commonProperties } from './commonProperties'
 
 export default [
   {
     id: 'googleDocs',
     type: 'GoogleDocs',
     url: 'https://developers.google.com/search/docs/advanced/structured-data/book',
-    show: true,
+    show: false,
   },
   commonProperties.context,
   commonProperties.type('Book'),
-  {
-    ...commonProperties.id,
-    tooltip: 'A globally unique ID for the book in URL format. It must be unique to your organization. The ID must be stable and not change over time.',
-  },
   {
     ...commonProperties.name,
     required: true,
@@ -81,4 +77,4 @@ export default [
       },
     ],
   },
-];
+]

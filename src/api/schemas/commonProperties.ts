@@ -6,28 +6,29 @@ export const commonProperties = {
     type: 'Hidden',
     required: true,
   },
-  
+
   type: (schemaType: string) => ({
     id: '@type',
     std: schemaType,
     type: 'Hidden',
     required: true,
   }),
-  
+
   id: {
     label: 'ID',
     id: '@id',
     std: '{{ post.url }}',
     tooltip: 'A unique identifier for the item.',
+    type: 'Hidden',
   },
-  
+
   name: {
     label: 'Name',
     id: 'name',
     std: '{{ post.title }}',
     tooltip: 'The name of the item.',
   },
-  
+
   description: {
     label: 'Description',
     id: 'description',
@@ -35,14 +36,14 @@ export const commonProperties = {
     std: '{{ post.excerpt }}',
     tooltip: 'A description of the item.',
   },
-  
+
   url: {
     label: 'URL',
     id: 'url',
     std: '{{ post.url }}',
     tooltip: 'URL of the item.',
   },
-  
+
   image: {
     label: 'Image',
     id: 'image',
@@ -51,7 +52,7 @@ export const commonProperties = {
     cloneable: true,
     tooltip: 'An image of the item.',
   },
-  
+
   author: {
     label: 'Author',
     id: 'author',
@@ -77,7 +78,7 @@ export const commonProperties = {
       },
     ],
   },
-  
+
   datePublished: {
     label: 'Date published',
     id: 'datePublished',
@@ -85,7 +86,7 @@ export const commonProperties = {
     std: '{{ post.date }}',
     tooltip: 'Date of first publication.',
   },
-  
+
   dateModified: {
     label: 'Date modified',
     id: 'dateModified',
@@ -93,7 +94,7 @@ export const commonProperties = {
     std: '{{ post.modified }}',
     tooltip: 'The date on which the item was most recently modified.',
   },
-  
+
   publisher: {
     label: 'Publisher',
     id: 'publisher',
@@ -120,7 +121,7 @@ export const commonProperties = {
       },
     ],
   },
-  
+
   mainEntityOfPage: {
     label: 'Main entity of page',
     id: 'mainEntityOfPage',
@@ -140,35 +141,35 @@ export const commonProperties = {
       },
     ],
   },
-  
+
   headline: {
     label: 'Headline',
     id: 'headline',
     std: '{{ post.title }}',
     tooltip: 'Headline of the article.',
   },
-  
+
   wordCount: {
     label: 'Word count',
     id: 'wordCount',
     std: '{{ post.word_count }}',
     tooltip: 'The number of words in the text of the Article.',
   },
-  
+
   inLanguage: {
     label: 'In language',
     id: 'inLanguage',
     std: '{{ site.language }}',
     tooltip: 'The language of the content.',
   },
-  
+
   keywords: {
     label: 'Keywords',
     id: 'keywords',
     std: '{{ post.tags }}',
     tooltip: 'Keywords or tags used to describe this content.',
   },
-  
+
   about: {
     label: 'About',
     id: 'about',
@@ -188,7 +189,7 @@ export const commonProperties = {
       },
     ],
   },
-  
+
   mentions: {
     label: 'Mentions',
     id: 'mentions',
@@ -209,4 +210,4 @@ export const commonProperties = {
       },
     ],
   },
-};
+}

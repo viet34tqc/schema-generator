@@ -1,15 +1,14 @@
-import { commonProperties } from './commonProperties';
+import { commonProperties } from './commonProperties'
 
 export default [
   {
     id: 'googleDocs',
     type: 'GoogleDocs',
     url: 'https://developers.google.com/search/docs/advanced/structured-data/event',
-    show: true,
+    show: false,
   },
   commonProperties.context,
   commonProperties.type('Event'),
-  commonProperties.id,
   {
     ...commonProperties.name,
     required: true,
@@ -174,4 +173,4 @@ export default [
       },
     ],
   },
-];
+]

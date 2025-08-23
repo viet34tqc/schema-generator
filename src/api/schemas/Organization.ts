@@ -1,15 +1,14 @@
-import { commonProperties } from './commonProperties';
+import { commonProperties } from './commonProperties'
 
 export default [
   {
     id: 'schemaDocs',
     type: 'SchemaDocs',
     url: 'https://schema.org/Organization',
-    show: true,
+    show: false,
   },
   commonProperties.context,
   commonProperties.type('Organization'),
-  commonProperties.id,
   {
     ...commonProperties.name,
     required: true,
@@ -51,7 +50,8 @@ export default [
       {
         id: 'contactType',
         label: 'Contact type',
-        tooltip: 'A person or organization can have different contact points, for different purposes.',
+        tooltip:
+          'A person or organization can have different contact points, for different purposes.',
       },
       {
         id: 'email',
@@ -98,7 +98,7 @@ export default [
     id: 'sameAs',
     label: 'Same as',
     cloneable: true,
-    tooltip: 'URL of a reference Web page that unambiguously indicates the item\'s identity.',
+    tooltip: "URL of a reference Web page that unambiguously indicates the item's identity.",
   },
   {
     id: 'foundingDate',
@@ -150,4 +150,4 @@ export default [
       },
     ],
   },
-];
+]
