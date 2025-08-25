@@ -157,11 +157,8 @@ export const localStorageApi = {
   },
 }
 
-// Mock the request function to use localStorage
+// Request function using localStorage (no artificial delay)
 export const request = async (apiName: string, params: Record<string, any> = {}): Promise<any> => {
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 100))
-
   switch (apiName) {
     case 'schemas':
       return localStorageApi.getSchemas()
