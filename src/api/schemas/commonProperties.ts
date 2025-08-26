@@ -127,6 +127,7 @@ export const commonProperties = {
     id: 'mainEntityOfPage',
     type: 'Group',
     tooltip: 'Indicates a page for which this thing is the main entity being described.',
+    hideGroupTitle: true, // Don't show the group title to avoid duplication
     fields: [
       {
         id: '@type',
@@ -136,6 +137,7 @@ export const commonProperties = {
       },
       {
         id: '@id',
+        label: 'Main entity of page',
         std: '{{ post.url }}',
         required: true,
       },

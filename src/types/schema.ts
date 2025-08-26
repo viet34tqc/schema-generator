@@ -11,11 +11,13 @@ export interface SchemaField {
   fields?: SchemaField[]
   show?: boolean
   cloneable?: boolean
+  cloneItemHeading?: string
   url?: string
   dependency?: string
   dependant?: boolean
   description?: string
   group?: string
+  hideGroupTitle?: boolean
 }
 
 export interface Schema {

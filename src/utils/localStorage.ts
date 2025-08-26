@@ -26,6 +26,7 @@ const defaultSchemaTypes: SchemaType[] = [
       Organization: 'Organization',
       LocalBusiness: 'Local Business',
       Product: 'Product',
+      ProductGroup: 'Product Group',
       Service: 'Service',
       Offer: 'Offer',
       JobPosting: 'Job Posting',

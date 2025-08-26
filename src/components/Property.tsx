@@ -1,24 +1,33 @@
 import { cn } from '@/lib/utils'
-import { Info, Loader2 } from 'lucide-react'
-import React, { Suspense, lazy, useEffect, useState } from 'react'
+import { Info } from 'lucide-react'
+import React from 'react'
 import { SchemaField } from '../types/schema'
-import { __, getFieldType } from '../utils/functions'
 import CloneableField from './Fields/CloneableField'
+import DataList from './Fields/DataList'
+import Date from './Fields/Date'
+import GoogleDocs from './Fields/GoogleDocs'
+import Group from './Fields/Group'
+import Hidden from './Fields/Hidden'
+import Image from './Fields/Image'
+import SchemaDocs from './Fields/SchemaDocs'
+import Select from './Fields/Select'
+import Text from './Fields/Text'
+import Textarea from './Fields/Textarea'
 import { Label } from './ui/label'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip'
 
-// Lazy load field components
+// Direct imports - no lazy loading needed for schema fields
 const fieldComponents = {
-  Text: lazy(() => import('./Fields/Text')),
-  Textarea: lazy(() => import('./Fields/Textarea')),
-  Select: lazy(() => import('./Fields/Select')),
-  DataList: lazy(() => import('./Fields/DataList')),
-  Date: lazy(() => import('./Fields/Date')),
-  Image: lazy(() => import('./Fields/Image')),
-  Group: lazy(() => import('./Fields/Group')),
-  Hidden: lazy(() => import('./Fields/Hidden')),
-  GoogleDocs: lazy(() => import('./Fields/GoogleDocs')),
-  SchemaDocs: lazy(() => import('./Fields/SchemaDocs')),
+  Text,
+  Textarea,
+  Select,
+  DataList,
+  Date,
+  Image,
+  Group,
+  Hidden,
+  GoogleDocs,
+  SchemaDocs,
 }
 
 interface PropertyProps {
@@ -29,9 +38,6 @@ interface PropertyProps {
 }
 
 const Property: React.FC<PropertyProps> = ({ field, value, onChange, schemaId }) => {
-  const [FieldComponent, setFieldComponent] = useState<React.ComponentType<any> | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-
   // Handle cloneable fields
   if (field.cloneable) {
     return (
@@ -65,30 +71,9 @@ const Property: React.FC<PropertyProps> = ({ field, value, onChange, schemaId })
     )
   }
 
-  useEffect(() => {
-    const loadComponent = async () => {
-      setIsLoading(true)
-      try {
-        let component
-        if (fieldComponents[field.type as keyof typeof fieldComponents]) {
-          component = fieldComponents[field.type as keyof typeof fieldComponents]
-        } else {
-          // Try to load dynamically
-          const dynamicComponent = await getFieldType(field.type)
-          component = dynamicComponent.default || dynamicComponent
-        }
-        setFieldComponent(() => component)
-      } catch (error) {
-        console.error(`Error loading field component for type: ${field.type}`, error)
-        // Fallback to Text component
-        setFieldComponent(() => fieldComponents.Text)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    loadComponent()
-  }, [field.type])
+  // Get the field component directly - no loading needed
+  const FieldComponent =
+    fieldComponents[field.type as keyof typeof fieldComponents] || fieldComponents.Text
 
   // Don't render hidden fields
   if (field.show === false) {
@@ -125,45 +110,17 @@ const Property: React.FC<PropertyProps> = ({ field, value, onChange, schemaId })
     )
   }
 
-  const renderField = () => {
-    if (isLoading) {
-      return (
-        <div className='flex items-center space-x-2 py-2'>
-          <Loader2 className='h-4 w-4 animate-spin' />
-          <span className='text-sm text-muted-foreground'>{__('Loading field...')}</span>
-        </div>
-      )
-    }
-
-    if (!FieldComponent) {
-      return <div className='text-sm text-destructive'>{__('Error loading field component')}</div>
-    }
-
-    return (
-      <Suspense
-        fallback={
-          <div className='flex items-center space-x-2 py-2'>
-            <Loader2 className='h-4 w-4 animate-spin' />
-            <span className='text-sm text-muted-foreground'>{__('Loading...')}</span>
-          </div>
-        }
-      >
-        <FieldComponent
-          id={fieldId}
-          field={field}
-          value={value}
-          onChange={onChange}
-          schemaId={schemaId}
-        />
-      </Suspense>
-    )
-  }
-
   return (
     <div className='space-y-2'>
       {renderLabel()}
       {field.description && <p className='text-sm text-muted-foreground'>{field.description}</p>}
-      {renderField()}
+      <FieldComponent
+        id={fieldId}
+        field={field}
+        value={value}
+        onChange={onChange}
+        schemaId={schemaId}
+      />
     </div>
   )
 }

@@ -75,19 +75,6 @@ export const request = async (
   return result
 }
 
-// Dynamic field type loader (replaces WordPress lazy loading)
-let typeCache: Record<string, Promise<any>> = {}
-export const getFieldType = (name: string): Promise<any> => {
-  if (!typeCache[name]) {
-    // Return a promise that resolves to the component
-    typeCache[name] = import(`../components/Fields/${name}.tsx`).catch(() => {
-      // Fallback to Text component if specific field type doesn't exist
-      return import('../components/Fields/Text.tsx')
-    })
-  }
-  return typeCache[name]
-}
-
 // Translation function (replaces WordPress __)
 export const __ = (text: string): string => {
   // For now, just return the text as-is

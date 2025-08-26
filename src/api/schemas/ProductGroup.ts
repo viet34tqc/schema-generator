@@ -1,0 +1,492 @@
+import { commonProperties } from './commonProperties'
+
+export default [
+  {
+    id: 'googleDocs',
+    type: 'GoogleDocs',
+    url: 'https://developers.google.com/search/docs/appearance/structured-data/product-variants',
+    show: true,
+  },
+  commonProperties.context,
+  {
+    label: 'Type',
+    id: '@type',
+    type: 'Select',
+    required: true,
+    std: 'ProductGroup',
+    options: {
+      ProductGroup: 'Product Group',
+    },
+  },
+  {
+    ...commonProperties.name,
+    required: true,
+    tooltip: 'The name of the Product group',
+  },
+  {
+    label: 'Variants',
+    id: 'hasVariant',
+    show: true,
+    tooltip: 'Indicates a product that is a member of the product group',
+    type: 'Group',
+    cloneable: true,
+    cloneItemHeading: 'Variant',
+    fields: [
+      {
+        id: '@type',
+        std: 'Product',
+        type: 'Hidden',
+        required: true,
+      },
+      {
+        label: 'SKU',
+        id: 'sku',
+        show: true,
+        std: '{{ product.variants.sku }}',
+        tooltip:
+          'The Stock Keeping Unit (SKU), i.e. a merchant-specific identifier for a product or service, or the product to which the offer refers.',
+      },
+      {
+        ...commonProperties.name,
+        std: '{{ product.variants.name }}',
+        tooltip: 'The name of the product variant.',
+      },
+      {
+        ...commonProperties.description,
+        std: '{{ product.variants.description }}',
+        tooltip: 'A description of the product variant.',
+      },
+      {
+        ...commonProperties.image,
+        std: '{{ product.variants.image }}',
+        tooltip: 'An image of the product variant.',
+      },
+      {
+        id: 'brand',
+        label: 'Brand',
+        type: 'Group',
+        tooltip: 'The brand of the product variant.',
+        fields: [
+          {
+            id: '@type',
+            std: 'Brand',
+            type: 'Hidden',
+            required: true,
+          },
+          {
+            id: 'name',
+            label: 'Name',
+            required: true,
+            std: '{{ product.variants.brand }}',
+          },
+        ],
+      },
+      {
+        id: 'color',
+        label: 'Color',
+        std: '{{ product.variants.color }}',
+        tooltip: 'The color of the product variant.',
+      },
+      {
+        id: 'size',
+        label: 'Size',
+        std: '{{ product.variants.size }}',
+        tooltip: 'The size of the product variant.',
+      },
+      {
+        id: 'offers',
+        type: 'Group',
+        label: 'Offers',
+        show: true,
+        fields: [
+          {
+            id: '@type',
+            label: 'Type',
+            type: 'DataList',
+            required: true,
+            std: 'Offer',
+            options: {
+              Offer: 'Offer',
+              AggregateOffer: 'Aggregate Offer',
+            },
+          },
+          {
+            id: 'price',
+            label: 'Price',
+            required: true,
+            tooltip: 'The offer price of a product',
+            std: '{{ product.variants.price }}',
+          },
+          {
+            id: 'priceCurrency',
+            label: 'Price currency',
+            std: 'USD',
+            required: true,
+            std: '{{ product.variants.currency }}',
+          },
+          {
+            id: 'priceValidUntil',
+            label: 'Price valid until',
+            type: 'Date',
+            tooltip:
+              'The date (in ISO 8601 date format) after which the price will no longer be available',
+            std: '{{ product.variants.sale_to }}',
+          },
+          {
+            id: 'availability',
+            label: 'Availability',
+            type: 'DataList',
+            required: true,
+            std: 'https://schema.org/InStock',
+            options: {
+              'https://schema.org/InStock': 'In stock',
+              'https://schema.org/OutOfStock': 'Out of stock',
+              'https://schema.org/PreOrder': 'Pre order',
+              'https://schema.org/Discontinued': 'Discontinued',
+              'https://schema.org/LimitedAvailability': 'Limited availability',
+              'https://schema.org/OnlineOnly': 'Online only',
+              'https://schema.org/SoldOut': 'Sold out',
+            },
+          },
+          {
+            id: 'url',
+            label: 'URL',
+            tooltip: 'URL of the product offer.',
+            std: '{{ product.variants.url }}',
+          },
+          {
+            id: 'seller',
+            label: 'Seller',
+            type: 'Group',
+            tooltip: 'An entity which offers products or services.',
+            fields: [
+              {
+                id: '@type',
+                std: 'Organization',
+                type: 'Hidden',
+                required: true,
+              },
+              {
+                id: 'name',
+                label: 'Name',
+                required: true,
+                std: '{{ site.name }}',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'Product group ID',
+    id: 'productGroupID',
+    std: '{{ product.sku }}',
+    required: true,
+    tooltip: 'Indicates a textual identifier for a ProductGroup.',
+  },
+  {
+    id: 'variesBy',
+    label: 'Varies by',
+    tooltip:
+      'Aspects by which the variants in the Product group vary, (for exp. size or color), if applicable. Reference these variant-identifying properties through their full Schema.org URL (for exp. https://schema.org/color)',
+    type: 'Select',
+    required: true,
+    options: {
+      'https://schema.org/color': 'https://schema.org/color',
+      'https://schema.org/size': 'https://schema.org/size',
+      'https://schema.org/suggestedAge': 'https://schema.org/suggestedAge',
+      'https://schema.org/material': 'https://schema.org/material',
+      'https://schema.org/pattern': 'https://schema.org/pattern',
+      'https://schema.org/gender': 'https://schema.org/gender',
+    },
+  },
+  {
+    ...commonProperties.url,
+    std: '{{ product.url }}',
+    tooltip: 'URL of the product group.',
+  },
+  {
+    id: 'review',
+    label: 'Reviews',
+    type: 'Group',
+    cloneable: true,
+    tooltip: 'A review of the product group.',
+    fields: [
+      {
+        id: '@type',
+        std: 'Review',
+        type: 'Hidden',
+        required: true,
+      },
+      {
+        id: 'author',
+        label: 'Author',
+        type: 'Group',
+        required: true,
+        fields: [
+          {
+            id: '@type',
+            std: 'Person',
+            type: 'Hidden',
+            required: true,
+          },
+          {
+            id: 'name',
+            label: 'Name',
+            required: true,
+          },
+        ],
+      },
+      {
+        id: 'reviewRating',
+        label: 'Review rating',
+        type: 'Group',
+        required: true,
+        fields: [
+          {
+            id: '@type',
+            std: 'Rating',
+            type: 'Hidden',
+            required: true,
+          },
+          {
+            id: 'ratingValue',
+            label: 'Rating value',
+            required: true,
+          },
+          {
+            id: 'bestRating',
+            label: 'Best rating',
+            std: '5',
+          },
+          {
+            id: 'worstRating',
+            label: 'Worst rating',
+            std: '1',
+          },
+        ],
+      },
+      {
+        id: 'datePublished',
+        label: 'Date published',
+        type: 'Date',
+        std: '{{ review.date }}',
+      },
+      {
+        id: 'positiveNotes',
+        type: 'Group',
+        label: 'Positive notes (Pros)',
+        tooltip:
+          'A list of positive statements about the Product group, listed in a specific order',
+        show: true,
+        fields: [
+          {
+            id: '@type',
+            std: 'ItemList',
+            type: 'Hidden',
+            required: true,
+          },
+          {
+            id: 'itemListElement',
+            label: 'Positive note',
+            cloneable: true,
+            cloneItemHeading: 'Note',
+            type: 'Group',
+            fields: [
+              {
+                id: '@type',
+                std: 'ListItem',
+                type: 'Hidden',
+                required: true,
+              },
+              {
+                id: 'position',
+                label: 'Position',
+                type: 'Text',
+                std: '1',
+              },
+              {
+                id: 'name',
+                label: 'Note text',
+                type: 'Text',
+                required: true,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'negativeNotes',
+        type: 'Group',
+        label: 'Negative notes (Cons)',
+        tooltip:
+          'A list of negative statements about the Product group, listed in a specific order',
+        show: true,
+        fields: [
+          {
+            id: '@type',
+            std: 'ItemList',
+            type: 'Hidden',
+            required: true,
+          },
+          {
+            id: 'itemListElement',
+            label: 'Negative note',
+            cloneable: true,
+            cloneItemHeading: 'Note',
+            type: 'Group',
+            fields: [
+              {
+                id: '@type',
+                std: 'ListItem',
+                type: 'Hidden',
+                required: true,
+              },
+              {
+                id: 'position',
+                label: 'Position',
+                type: 'Text',
+                std: '1',
+              },
+              {
+                id: 'name',
+                label: 'Note text',
+                type: 'Text',
+                required: true,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'aggregateRating',
+    label: 'Aggregate rating',
+    type: 'Group',
+    tooltip: 'The overall rating, based on a collection of reviews or ratings.',
+    fields: [
+      {
+        id: '@type',
+        std: 'AggregateRating',
+        type: 'Hidden',
+        required: true,
+      },
+      {
+        id: 'ratingValue',
+        label: 'Rating value',
+        required: true,
+        tooltip: 'The rating for the content.',
+        std: '{{ product.rating }}',
+      },
+      {
+        id: 'bestRating',
+        label: 'Best rating',
+        std: '5',
+        tooltip: 'The highest value allowed in this rating system.',
+      },
+      {
+        id: 'worstRating',
+        label: 'Worst rating',
+        std: '1',
+        tooltip: 'The lowest value allowed in this rating system.',
+      },
+      {
+        id: 'ratingCount',
+        label: 'Rating count',
+        tooltip: 'The count of total number of ratings.',
+        std: '{{ product.review_count }}',
+      },
+      {
+        id: 'reviewCount',
+        label: 'Review count',
+        tooltip: 'The count of total number of reviews.',
+        std: '{{ product.review_count }}',
+      },
+    ],
+  },
+  {
+    id: 'offers',
+    type: 'Group',
+    label: 'Offers',
+    show: true,
+    fields: [
+      {
+        id: '@type',
+        label: 'Type',
+        type: 'DataList',
+        required: true,
+        std: 'Offer',
+        options: {
+          Offer: 'Offer',
+          AggregateOffer: 'Aggregate Offer',
+        },
+      },
+      {
+        id: 'price',
+        label: 'Price',
+        required: true,
+        tooltip: 'The offer price of a product',
+        std: '{{ product.price }}',
+      },
+      {
+        id: 'priceCurrency',
+        label: 'Price currency',
+        std: 'USD',
+        required: true,
+        std: '{{ product.currency }}',
+      },
+      {
+        id: 'priceValidUntil',
+        label: 'Price valid until',
+        type: 'Date',
+        tooltip:
+          'The date (in ISO 8601 date format) after which the price will no longer be available',
+        std: '{{ product.sale_to }}',
+      },
+      {
+        id: 'availability',
+        label: 'Availability',
+        type: 'DataList',
+        required: true,
+        std: 'https://schema.org/InStock',
+        options: {
+          'https://schema.org/InStock': 'In stock',
+          'https://schema.org/OutOfStock': 'Out of stock',
+          'https://schema.org/PreOrder': 'Pre order',
+          'https://schema.org/Discontinued': 'Discontinued',
+          'https://schema.org/LimitedAvailability': 'Limited availability',
+          'https://schema.org/OnlineOnly': 'Online only',
+          'https://schema.org/SoldOut': 'Sold out',
+        },
+      },
+      {
+        id: 'url',
+        label: 'URL',
+        tooltip: 'URL of the product offer.',
+        std: '{{ product.url }}',
+      },
+      {
+        id: 'seller',
+        label: 'Seller',
+        type: 'Group',
+        tooltip: 'An entity which offers products or services.',
+        fields: [
+          {
+            id: '@type',
+            std: 'Organization',
+            type: 'Hidden',
+            required: true,
+          },
+          {
+            id: 'name',
+            label: 'Name',
+            required: true,
+            std: '{{ site.name }}',
+          },
+        ],
+      },
+    ],
+  },
+]

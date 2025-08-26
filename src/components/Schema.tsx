@@ -142,14 +142,16 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id, setSchemas }) =
               {/* Schema Fields Column */}
               <div className='space-y-4'>
                 <h3 className='text-lg font-semibold'>{__('Schema Properties')}</h3>
-                <SchemaTypeComponent schema={schema} updateSchema={updateSchema} schemaId={id} />
+                <div className='max-h-[70vh] overflow-y-auto pr-2'>
+                  <SchemaTypeComponent schema={schema} updateSchema={updateSchema} schemaId={id} />
+                </div>
               </div>
 
               {/* Live JSON-LD Preview Column */}
               <div className='space-y-4'>
                 <h3 className='text-lg font-semibold'>{__('Live JSON-LD Preview')}</h3>
                 <div className='bg-muted border rounded-lg p-4'>
-                  <pre className='text-sm overflow-auto max-h-96 text-foreground'>
+                  <pre className='text-sm overflow-auto max-h-[70vh] text-foreground'>
                     <code>{generateLiveJsonLd(schema, id)}</code>
                   </pre>
                   <div className='mt-3 flex justify-end'>

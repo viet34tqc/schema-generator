@@ -1,4 +1,3 @@
-import { Loader2 } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { Schema, SchemaField } from '../types/schema'
 import { __, get } from '../utils/functions'
@@ -14,24 +13,16 @@ interface SchemaTypeProps {
 
 const SchemaType: React.FC<SchemaTypeProps> = ({ schema, updateSchema, schemaId }) => {
   const [fields, setFields] = useState<SchemaField[]>([])
-  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const loadFields = () => {
-      setIsLoading(true)
+    if (schema.type) {
       try {
         const fieldData = localStorageApi.getSchemaFieldDefinitions(schema.type)
         setFields(fieldData || [])
       } catch (error) {
         console.error('Error loading schema fields:', error)
         setFields([])
-      } finally {
-        setIsLoading(false)
       }
-    }
-
-    if (schema.type) {
-      loadFields()
     }
   }, [schema.type])
 
@@ -67,15 +58,6 @@ const SchemaType: React.FC<SchemaTypeProps> = ({ schema, updateSchema, schemaId 
     }
 
     return content
-  }
-
-  if (isLoading) {
-    return (
-      <div className='flex items-center justify-center py-8'>
-        <Loader2 className='h-6 w-6 animate-spin' />
-        <span className='ml-2 text-sm text-muted-foreground'>{__('Loading schema fields...')}</span>
-      </div>
-    )
   }
 
   if (!fields.length) {
