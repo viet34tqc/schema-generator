@@ -137,7 +137,6 @@ export const commonProperties = {
       },
       {
         id: '@id',
-        label: 'Main entity of page',
         std: '{{ post.url }}',
         required: true,
       },

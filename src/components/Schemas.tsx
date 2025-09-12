@@ -1,10 +1,8 @@
 import { ChevronDown, Plus } from 'lucide-react'
-import { useContext, useEffect, useState } from 'react'
-import { useImmer } from 'use-immer'
-import { SchemaLinkContext } from '../contexts/SchemaLinkContext'
-import { Schema, SchemaType as SchemaTypeData } from '../types/schema'
-import { __, uniqueID } from '../utils/functions'
-import { localStorageApi } from '../utils/localStorage'
+import { useEffect, useState } from 'react'
+import { useSchemas, useSchemaStore, useSchemaTypes } from '../stores/schemaStore'
+import { SchemaType as SchemaTypeData } from '../types/schema'
+import { __ } from '../utils/functions'
 import Inserter from './Inserter'
 import SchemaComponent from './Schema'
 import { Button } from './ui/button'
@@ -12,53 +10,34 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from './ui/dro
 
 const Schemas = () => {
   const [items, setItems] = useState<SchemaTypeData[]>([])
-  const [schemas, setSchemas] = useImmer<Record<string, Schema>>({})
 
-  const context = useContext(SchemaLinkContext)
-  if (!context) {
-    throw new Error('Schemas must be used within a SchemaLinkProvider')
-  }
-  const { addSchemaLink, removeSchemaLink } = context
+  // Zustand store hooks
+  const schemas = useSchemas()
+  const schemaTypes = useSchemaTypes()
+  const addSchema = useSchemaStore((state) => state.addSchema)
+  const deleteSchema = useSchemaStore((state) => state.deleteSchema)
 
   useEffect(() => {
-    // Force refresh schema types to ensure new structure is loaded
-    localStorageApi.refreshSchemaTypes()
-
-    // Load schema types
-    const schemaTypes = localStorageApi.getSchemaTypes()
+    // Load schema types from store
     setItems(schemaTypes)
-  }, [])
+  }, [schemaTypes])
 
-  useEffect(() => {
-    // Load schemas
-    const data = localStorageApi.getSchemas()
-    if (data) {
-      setSchemas(data)
+  const handleAddSchema = (e: React.MouseEvent<HTMLButtonElement>, onToggle: () => void) => {
+    onToggle()
+    const target = e.target as HTMLButtonElement
+    const type = target.dataset.value
+    const label = target.textContent?.trim() || type || 'Schema'
+
+    if (type) {
+      // addSchema already updates schema links internally
+      addSchema(type, label)
     }
-  }, [setSchemas])
+  }
 
-  const addSchema = (e: React.MouseEvent<HTMLButtonElement>, onToggle: () => void) =>
-    setSchemas((draft) => {
-      onToggle()
-      const target = e.target as HTMLButtonElement
-      const type = target.dataset.value
-      const label = target.textContent?.trim() || type
-      const id = uniqueID()
-      const newSchema: Schema = { type: type!, fields: { _label: label } }
-
-      draft[id] = newSchema
-      addSchemaLink(id, newSchema)
-      // Save to localStorage
-      localStorageApi.saveSchemas(draft)
-    })
-
-  const deleteSchema = (id: string) =>
-    setSchemas((draft) => {
-      delete draft[id]
-      removeSchemaLink(id)
-      // Save to localStorage
-      localStorageApi.saveSchemas(draft)
-    })
+  const handleDeleteSchema = (id: string) => {
+    // deleteSchema already removes schema links internally
+    deleteSchema(id)
+  }
 
   const hasSchemas = Object.keys(schemas).length > 0
 
@@ -67,13 +46,7 @@ const Schemas = () => {
       {hasSchemas ? (
         <div className='space-y-4'>
           {Object.entries(schemas).map(([id, schema]) => (
-            <SchemaComponent
-              key={id}
-              schema={schema}
-              deleteProp={deleteSchema}
-              id={id}
-              setSchemas={setSchemas}
-            />
+            <SchemaComponent key={id} schema={schema} deleteProp={handleDeleteSchema} id={id} />
           ))}
         </div>
       ) : (
@@ -110,7 +83,7 @@ const Schemas = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className='w-80'>
-            <Inserter items={items} group={true} hasSearch={true} onSelect={addSchema} />
+            <Inserter items={items} group={true} hasSearch={true} onSelect={handleAddSchema} />
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

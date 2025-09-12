@@ -4,7 +4,8 @@
   "description": "Standalone React application for Schema.org structured data generation",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
+    "dev:check": "tsc && vite --host",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint . --fix",

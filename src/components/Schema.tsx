@@ -1,9 +1,8 @@
 import { ChevronDown, ChevronRight, ExternalLink, Trash2 } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
-import { useSchemaLinks } from '../contexts/SchemaLinkContext'
+import { getSchemaFieldDefinitions, useSchemaStore } from '../stores/schemaStore'
 import { Schema as SchemaType } from '../types/schema'
 import { __, get } from '../utils/functions'
-import { localStorageApi } from '../utils/localStorage'
 import { formatJsonLdForDisplay, renderSchemaAsJsonLd } from '../utils/schemaRenderer'
 import SchemaTypeComponent from './SchemaType'
 import { Badge } from './ui/badge'
@@ -16,7 +15,6 @@ interface SchemaProps {
   schema: SchemaType
   deleteProp: (id: string) => void
   id: string
-  setSchemas: (updater: (draft: Record<string, SchemaType>) => void) => void
 }
 
 const generateLiveJsonLd = (schema: any, schemaId: string): string => {
@@ -28,8 +26,8 @@ const generateLiveJsonLd = (schema: any, schemaId: string): string => {
   }
 }
 
-const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id, setSchemas }) => {
-  const { updateSchemaLinkLabel } = useSchemaLinks()
+const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id }) => {
+  const { updateSchema } = useSchemaStore()
   const { addToast } = useToast()
   const [documentationUrl, setDocumentationUrl] = useState<string | null>(null)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -39,7 +37,7 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id, setSchemas }) =
   useEffect(() => {
     const loadDocumentationUrl = () => {
       try {
-        const fieldData = localStorageApi.getSchemaFieldDefinitions(schema.type)
+        const fieldData = getSchemaFieldDefinitions(schema.type)
         if (fieldData && Array.isArray(fieldData)) {
           const docsField = fieldData.find(
             (field: any) =>
@@ -67,26 +65,8 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id, setSchemas }) =
     deleteProp(id)
   }
 
-  const updateSchema = (path: string, value: any) => {
-    setSchemas((draft) => {
-      const keys = path.split('.')
-      let current: any = draft[id]
-
-      for (let i = 0; i < keys.length - 1; i++) {
-        const key = keys[i]
-        if (!(key in current)) {
-          current[key] = {}
-        }
-        current = current[key]
-      }
-
-      current[keys[keys.length - 1]] = value
-
-      // Update schema link label if _label field is changed
-      if (path === 'fields._label') {
-        updateSchemaLinkLabel(id, value)
-      }
-    })
+  const handleUpdateSchema = (path: string, value: any) => {
+    updateSchema(id, path, value)
   }
 
   const schemaLabel = get(schema, 'fields._label', schema.type)
@@ -143,7 +123,11 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id, setSchemas }) =
               <div className='space-y-4'>
                 <h3 className='text-lg font-semibold'>{__('Schema Properties')}</h3>
                 <div className='max-h-[70vh] overflow-y-auto pr-2'>
-                  <SchemaTypeComponent schema={schema} updateSchema={updateSchema} schemaId={id} />
+                  <SchemaTypeComponent
+                    schema={schema}
+                    updateSchema={handleUpdateSchema}
+                    schemaId={id}
+                  />
                 </div>
               </div>
 

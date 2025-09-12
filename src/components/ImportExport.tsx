@@ -1,7 +1,7 @@
 import { AlertCircle, CheckCircle, Download, FileText, Upload } from 'lucide-react'
 import React, { useRef, useState } from 'react'
+import { useSchemas, useSchemaStore } from '../stores/schemaStore'
 import { __, downloadData, parseUploadedFile } from '../utils/functions'
-import { localStorageApi } from '../utils/localStorage'
 import Panel from './Panel'
 import { Alert, AlertDescription } from './ui/alert'
 import { Button } from './ui/button'
@@ -14,11 +14,14 @@ const ImportExport: React.FC = () => {
   const [statusType, setStatusType] = useState<'success' | 'error' | ''>('')
   const fileInputRef = useRef<HTMLInputElement>(null)
 
+  // Zustand store hooks
+  const schemas = useSchemas()
+  const importSchemas = useSchemaStore((state) => state.importSchemas)
+
   const handleExport = async () => {
     setIsExporting(true)
     setImportStatus('')
     try {
-      const schemas = localStorageApi.getSchemas()
       const filename = `schema-export-${new Date().toISOString().split('T')[0]}.json`
       downloadData(schemas, filename)
       setImportStatus(__('Schemas exported successfully!'))
@@ -46,10 +49,8 @@ const ImportExport: React.FC = () => {
         throw new Error(__('Invalid file format'))
       }
 
-      // Import schemas directly to localStorage
-      const existingSchemas = localStorageApi.getSchemas()
-      const mergedSchemas = { ...existingSchemas, ...data }
-      localStorageApi.saveSchemas(mergedSchemas)
+      // Import schemas using Zustand store
+      importSchemas(data)
       const result = { success: true, message: 'Schemas imported successfully' }
 
       if (result.success) {

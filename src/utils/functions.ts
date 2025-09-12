@@ -3,88 +3,45 @@ import { nanoid } from 'nanoid'
 // Generate unique ID (replaces WordPress uniqueID function)
 export const uniqueID = (): string => nanoid()
 
-// API request cache
-let apiCache: Record<string, any> = {}
-
-// Request function using localStorage (replaces WordPress REST API calls)
-export const request = async (
-  apiName: string,
-  params: Record<string, any> = {},
-  method: string = 'GET',
-  cache: boolean = true,
-): Promise<any> => {
-  const { localStorageApi } = await import('./localStorage.js')
-
-  const cacheKey = JSON.stringify({ apiName, params, method })
-  if (cache && apiCache[cacheKey]) {
-    return apiCache[cacheKey]
-  }
-
-  let result: any
-
-  switch (apiName) {
-    case 'data':
-      if (params.type === 'schemas') {
-        result = localStorageApi.getSchemaTypes()
-      } else {
-        result = null
-      }
-      break
-    case 'schemas':
-      result = localStorageApi.getSchemas()
-      break
-    case 'types':
-      result = localStorageApi.getSchemaFieldDefinitions(params.type)
-      break
-    case 'terms':
-      // Mock term data for search functionality
-      result = [
-        { value: '1', label: 'Technology' },
-        { value: '2', label: 'Business' },
-        { value: '3', label: 'Health' },
-        { value: '4', label: 'Education' },
-        { value: '5', label: 'Entertainment' },
-      ].filter(
-        (term) => !params.term || term.label.toLowerCase().includes(params.term.toLowerCase()),
-      )
-      break
-    case 'posts':
-      // Mock post data for search functionality
-      result = [
-        { value: '1', label: 'Sample Post 1' },
-        { value: '2', label: 'Sample Post 2' },
-        { value: '3', label: 'About Us Page' },
-        { value: '4', label: 'Contact Page' },
-        { value: '5', label: 'Blog Post Example' },
-      ].filter(
-        (post) => !params.term || post.label.toLowerCase().includes(params.term.toLowerCase()),
-      )
-      break
-    case 'meta_keys':
-      // Mock meta keys data
-      result = ['custom_field_1', 'custom_field_2', 'seo_title', 'seo_description']
-      break
-    default:
-      result = null
-  }
-
-  if (cache) {
-    apiCache[cacheKey] = result
-  }
-
-  return result
+// Mock data functions for components that still need them
+export const getMockTerms = (searchTerm?: string) => {
+  const terms = [
+    { value: '1', label: 'Technology' },
+    { value: '2', label: 'Business' },
+    { value: '3', label: 'Health' },
+    { value: '4', label: 'Education' },
+    { value: '5', label: 'Entertainment' },
+  ]
+  return searchTerm
+    ? terms.filter((term) => term.label.toLowerCase().includes(searchTerm.toLowerCase()))
+    : terms
 }
+
+export const getMockPosts = (searchTerm?: string) => {
+  const posts = [
+    { value: '1', label: 'Sample Post 1' },
+    { value: '2', label: 'Sample Post 2' },
+    { value: '3', label: 'About Us Page' },
+    { value: '4', label: 'Contact Page' },
+    { value: '5', label: 'Blog Post Example' },
+  ]
+  return searchTerm
+    ? posts.filter((post) => post.label.toLowerCase().includes(searchTerm.toLowerCase()))
+    : posts
+}
+
+export const getMockMetaKeys = () => [
+  'custom_field_1',
+  'custom_field_2',
+  'seo_title',
+  'seo_description',
+]
 
 // Translation function (replaces WordPress __)
 export const __ = (text: string): string => {
   // For now, just return the text as-is
   // In a real implementation, you could add i18n support here
   return text
-}
-
-// Clear API cache
-export const clearApiCache = (): void => {
-  apiCache = {}
 }
 
 // Utility function to get nested object property safely

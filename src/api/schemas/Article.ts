@@ -173,7 +173,6 @@ export default [
   {
     ...commonProperties.mainEntityOfPage,
     tooltip: 'Indicates a page for which the content is the main entity being described.',
-    std: '{{ schemas.webpage }}',
     show: true,
   },
   {

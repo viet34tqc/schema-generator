@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
+import { getSchemaFieldDefinitions } from '../stores/schemaStore'
 import { Schema, SchemaField } from '../types/schema'
 import { __, get } from '../utils/functions'
-import { localStorageApi } from '../utils/localStorage'
 import Panel from './Panel'
 import Property from './Property'
 
@@ -17,7 +17,7 @@ const SchemaType: React.FC<SchemaTypeProps> = ({ schema, updateSchema, schemaId 
   useEffect(() => {
     if (schema.type) {
       try {
-        const fieldData = localStorageApi.getSchemaFieldDefinitions(schema.type)
+        const fieldData = getSchemaFieldDefinitions(schema.type)
         setFields(fieldData || [])
       } catch (error) {
         console.error('Error loading schema fields:', error)

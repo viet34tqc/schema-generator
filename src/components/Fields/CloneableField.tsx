@@ -51,7 +51,7 @@ const CloneableField: React.FC<CloneableFieldProps> = ({
   }
 
   const itemLabel = field.label || 'Item'
-  const canRemove = items.length > 0
+  // const canRemove = items.length > 0
 
   return (
     <div className='space-y-3'>

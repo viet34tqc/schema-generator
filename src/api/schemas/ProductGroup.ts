@@ -120,9 +120,8 @@ export default [
           {
             id: 'priceCurrency',
             label: 'Price currency',
-            std: 'USD',
-            required: true,
             std: '{{ product.variants.currency }}',
+            required: true,
           },
           {
             id: 'priceValidUntil',
@@ -433,9 +432,8 @@ export default [
       {
         id: 'priceCurrency',
         label: 'Price currency',
-        std: 'USD',
-        required: true,
         std: '{{ product.currency }}',
+        required: true,
       },
       {
         id: 'priceValidUntil',
