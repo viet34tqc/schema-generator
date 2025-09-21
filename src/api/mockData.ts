@@ -4,52 +4,83 @@ export const schemaTypes = [
   {
     label: 'E-commerce',
     options: {
-      'Book': 'Book',
-      'FAQPage': 'FAQ',
-      'Product': 'Product',
-      'Review': 'Review snippet',
-      'SoftwareApplication': 'Software app',
+      Book: 'Book',
+      FAQPage: 'FAQ',
+      Product: 'Product',
+      Review: 'Review snippet',
+      SoftwareApplication: 'Software app',
     },
   },
   {
     label: 'Organizations',
     options: {
-      'HowTo': 'How-to',
-      'LocalBusiness': 'Local business',
+      HowTo: 'How-to',
+      LocalBusiness: 'Local business',
     },
   },
   {
-    label: 'Content',
+    label: 'Jobs',
     options: {
-      'Article': 'Article',
-      'BlogPosting': 'Blog post',
-      'NewsArticle': 'News article',
-      'Recipe': 'Recipe',
-      'VideoObject': 'Video',
-      'ImageObject': 'Image',
-      'AudioObject': 'Audio',
-      'Event': 'Event',
-      'Course': 'Course',
-      'JobPosting': 'Job posting',
-      'QAPage': 'Q&A page',
+      EmployerAggregateRating: 'Employer aggregate rating',
+      Occupation: 'Estimated salary',
+      JobPosting: 'Job posting',
+    },
+  },
+  {
+    label: 'Entertainment',
+    options: {
+      Event: 'Event',
+      ImageObject: 'Image license',
+      ItemList: 'Movie',
+    },
+  },
+  {
+    label: 'News',
+    options: {
+      Article: 'Article',
+      ClaimReview: 'Fact check',
+      VideoObject: 'Video',
+    },
+  },
+  {
+    label: 'Food and Drink',
+    options: {
+      Recipe: 'Recipe',
+    },
+  },
+  {
+    label: 'Education and Science',
+    options: {
+      Course: 'Course',
+      Dataset: 'Dataset',
+      MathSolver: 'Math solver',
+      Quiz: 'Practice problems (Quiz)',
+      QAPage: 'Q&A',
     },
   },
   {
     label: 'Basic',
     options: {
-      'WebSite': 'WebSite',
-      'WebPage': 'WebPage',
-      'SearchAction': 'SearchAction',
-      'BreadcrumbList': 'BreadcrumbList',
-      'Thing': 'Thing',
-      'Person': 'Person',
-      'Organization': 'Organization',
-      'Service': 'Service',
-      'Offer': 'Offer',
-      'CustomJsonLd': 'Custom JSON-LD',
+      WebSite: 'WebSite',
+      WebPage: 'WebPage',
+      SearchAction: 'SearchAction',
+      BreadcrumbList: 'BreadcrumbList',
+      Thing: 'Thing',
+      Person: 'Person',
+      Organization: 'Organization',
+      Service: 'Service',
+      Offer: 'Offer',
+      CustomJsonLd: 'Custom JSON-LD',
     },
   },
-];
+  {
+    label: 'Additional',
+    options: {
+      AudioObject: 'Audio',
+      ProductGroup: 'Product Group',
+    },
+  },
+]
 
 export const variables = [
   {
@@ -95,10 +126,10 @@ export const variables = [
       'current.url': 'Current URL',
     },
   },
-];
+]
 
 export const locations = {
-  'General': {
+  General: {
     label: 'General',
     options: [
       { value: 'general:all', label: 'All pages' },
@@ -108,7 +139,7 @@ export const locations = {
       { value: 'general:404', label: '404 page' },
     ],
   },
-  'Posts': {
+  Posts: {
     label: 'Posts',
     options: [
       { value: 'post_type:post', label: 'All posts' },
@@ -117,7 +148,7 @@ export const locations = {
       { value: 'post:page', label: 'Specific page' },
     ],
   },
-  'Archives': {
+  Archives: {
     label: 'Archives',
     options: [
       { value: 'post_type:archive:post', label: 'Post archive' },
@@ -125,7 +156,7 @@ export const locations = {
       { value: 'taxonomy:archive:post_tag', label: 'Tag archive' },
     ],
   },
-};
+}
 
 export const metaKeys = [
   { value: '_custom_field_1', label: '_custom_field_1' },
@@ -134,15 +165,13 @@ export const metaKeys = [
   { value: 'product_sku', label: 'product_sku' },
   { value: 'event_date', label: 'event_date' },
   { value: 'rating', label: 'rating' },
-];
+]
 
 // Default schemas that come pre-installed
 export const defaultSchemas = {
-  'website_schema': {
+  website_schema: {
     type: 'WebSite',
-    location: [
-      [{ name: 'general:all', value: 'all', label: 'All pages' }]
-    ],
+    location: [[{ name: 'general:all', value: 'all', label: 'All pages' }]],
     fields: {
       _label: 'Website Schema',
       name: '{{ site.name }}',
@@ -150,11 +179,9 @@ export const defaultSchemas = {
       description: '{{ site.description }}',
     },
   },
-  'organization_schema': {
+  organization_schema: {
     type: 'Organization',
-    location: [
-      [{ name: 'general:all', value: 'all', label: 'All pages' }]
-    ],
+    location: [[{ name: 'general:all', value: 'all', label: 'All pages' }]],
     fields: {
       _label: 'Organization Schema',
       name: '{{ site.name }}',
@@ -162,4 +189,4 @@ export const defaultSchemas = {
       logo: '{{ site.logo }}',
     },
   },
-};
+}

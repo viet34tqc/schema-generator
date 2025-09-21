@@ -46,41 +46,68 @@ const defaultSchemaTypes: SchemaType[] = [
     options: {
       HowTo: 'How-to',
       LocalBusiness: 'Local business',
-      Organization: 'Organization',
-      Person: 'Person',
-      Service: 'Service',
     },
   },
   {
-    label: 'Content',
+    label: 'Jobs',
+    options: {
+      EmployerAggregateRating: 'Employer aggregate rating',
+      Occupation: 'Estimated salary',
+      JobPosting: 'Job posting',
+    },
+  },
+  {
+    label: 'Entertainment',
+    options: {
+      Event: 'Event',
+      ImageObject: 'Image license',
+      ItemList: 'Movie',
+    },
+  },
+  {
+    label: 'News',
     options: {
       Article: 'Article',
-      BlogPosting: 'Blog post',
-      NewsArticle: 'News article',
-      Recipe: 'Recipe',
+      ClaimReview: 'Fact check',
       VideoObject: 'Video',
-      ImageObject: 'Image',
-      AudioObject: 'Audio',
-      Event: 'Event',
+    },
+  },
+  {
+    label: 'Food and Drink',
+    options: {
+      Recipe: 'Recipe',
+    },
+  },
+  {
+    label: 'Education and Science',
+    options: {
       Course: 'Course',
-      JobPosting: 'Job posting',
-      QAPage: 'Q&A page',
+      Dataset: 'Dataset',
+      MathSolver: 'Math solver',
+      Quiz: 'Practice problems (Quiz)',
+      QAPage: 'Q&A',
     },
   },
   {
-    label: 'Website',
+    label: 'Basic',
     options: {
-      WebSite: 'Website',
-      WebPage: 'Web page',
-      BreadcrumbList: 'Breadcrumb',
-      SearchAction: 'Search action',
-    },
-  },
-  {
-    label: 'Other',
-    options: {
+      WebSite: 'WebSite',
+      WebPage: 'WebPage',
+      SearchAction: 'SearchAction',
+      BreadcrumbList: 'BreadcrumbList',
       Thing: 'Thing',
+      Person: 'Person',
+      Organization: 'Organization',
+      Service: 'Service',
+      Offer: 'Offer',
       CustomJsonLd: 'Custom JSON-LD',
+    },
+  },
+  {
+    label: 'Additional',
+    options: {
+      AudioObject: 'Audio',
+      ProductGroup: 'Product Group',
     },
   },
 ]
@@ -223,7 +250,6 @@ export const useSchemaStore = create<SchemaStore>()(
       name: 'schema-generator-store',
       partialize: (state) => ({
         schemas: state.schemas,
-        schemaTypes: state.schemaTypes,
         schemaLinks: state.schemaLinks,
       }),
     },

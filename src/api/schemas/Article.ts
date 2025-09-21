@@ -14,32 +14,52 @@ export default [
     type: 'Select',
     required: true,
     std: 'Article',
-    options: {
-      // General
-      Article: 'Article',
-      AdvertiserContentArticle: 'Advertiser Content Article',
-      Report: 'Report',
-      SatiricalArticle: 'Satirical Article',
-      // News
-      NewsArticle: 'News Article',
-      AnalysisNewsArticle: 'Analysis News Article',
-      AskPublicNewsArticle: 'Ask Public News Article',
-      BackgroundNewsArticle: 'Background News Article',
-      OpinionNewsArticle: 'Opinion News Article',
-      ReportageNewsArticle: 'Reportage News Article',
-      ReviewNewsArticle: 'Review News Article',
-      // Scholarly
-      ScholarlyArticle: 'Scholarly Article',
-      MedicalScholarlyArticle: 'Medical Scholarly Article',
-      // Social Media
-      SocialMediaPosting: 'Social Media Posting',
-      BlogPosting: 'Blog Posting',
-      LiveBlogPosting: 'Live Blog Posting',
-      DiscussionForumPosting: 'Discussion Forum Posting',
-      // Tech
-      TechArticle: 'Tech Article',
-      APIReference: 'API Reference',
-    },
+    options: [
+      {
+        label: 'General',
+        options: {
+          Article: 'Article',
+          AdvertiserContentArticle: 'Advertiser Content Article',
+          Report: 'Report',
+          SatiricalArticle: 'Satirical Article',
+        },
+      },
+      {
+        label: 'News',
+        options: {
+          NewsArticle: 'News Article',
+          AnalysisNewsArticle: 'Analysis News Article',
+          AskPublicNewsArticle: 'Ask Public News Article',
+          BackgroundNewsArticle: 'Background News Article',
+          OpinionNewsArticle: 'Opinion News Article',
+          ReportageNewsArticle: 'Reportage News Article',
+          ReviewNewsArticle: 'Review News Article',
+        },
+      },
+      {
+        label: 'Scholarly',
+        options: {
+          ScholarlyArticle: 'Scholarly Article',
+          MedicalScholarlyArticle: 'Medical Scholarly Article',
+        },
+      },
+      {
+        label: 'Social Media',
+        options: {
+          SocialMediaPosting: 'Social Media Posting',
+          BlogPosting: 'Blog Posting',
+          LiveBlogPosting: 'Live Blog Posting',
+          DiscussionForumPosting: 'Discussion Forum Posting',
+        },
+      },
+      {
+        label: 'Tech',
+        options: {
+          TechArticle: 'Tech Article',
+          APIReference: 'API Reference',
+        },
+      },
+    ],
   },
   {
     ...commonProperties.name,
