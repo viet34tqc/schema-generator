@@ -7,7 +7,10 @@ export interface SchemaField {
   tooltip?: string
   placeholder?: string
   rows?: number
-  options?: Record<string, string> | Array<{ value: string; label: string }>
+  options?:
+    | Record<string, string>
+    | Array<{ value: string; label: string }>
+    | Array<{ label: string; options: Record<string, string> }>
   fields?: SchemaField[]
   show?: boolean
   cloneable?: boolean
