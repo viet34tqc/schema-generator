@@ -82,7 +82,7 @@ const Schemas = () => {
               <ChevronDown className='w-4 h-4 ml-2' />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className='w-80'>
+          <DropdownMenuContent className='w-80 p-0' onCloseAutoFocus={(e) => e.preventDefault()}>
             <Inserter items={items} group={true} hasSearch={true} onSelect={handleAddSchema} />
           </DropdownMenuContent>
         </DropdownMenu>

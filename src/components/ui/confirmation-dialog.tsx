@@ -50,7 +50,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
             </div>
           )}
         </DialogHeader>
-        <div className='flex justify-end space-x-3 mt-6 pt-4 border-t border-border'>
+        <div className='flex justify-end space-x-3 mt-6 pt-4 pb-2 border-t border-border'>
           <Button variant='outline' onClick={handleCancel} className='min-w-[80px]'>
             {cancelText}
           </Button>
