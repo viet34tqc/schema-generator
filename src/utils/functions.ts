@@ -44,26 +44,30 @@ export const __ = (text: string): string => {
   return text
 }
 
-// Utility function to get nested object property safely
-export const get = (obj: any, path: string, defaultValue: any = undefined): any => {
+// Utility function to get nested object property safely with proper typing
+export const get = <T = unknown>(
+  obj: Record<string, unknown>,
+  path: string,
+  defaultValue?: T,
+): T | undefined => {
   const keys = path.split('.')
-  let result = obj
+  let result: unknown = obj
 
   for (const key of keys) {
     if (result == null || typeof result !== 'object') {
       return defaultValue
     }
-    result = result[key]
+    result = (result as Record<string, unknown>)[key]
   }
 
-  return result !== undefined ? result : defaultValue
+  return result !== undefined ? (result as T) : defaultValue
 }
 
 // Utility function to set nested object property
-export const set = (obj: any, path: string, value: any): any => {
+export const set = <T extends Record<string, unknown>>(obj: T, path: string, value: unknown): T => {
   const keys = path.split('.')
   const lastKey = keys.pop()
-  let current = obj
+  let current: Record<string, unknown> = obj
 
   if (!lastKey) return obj
 
@@ -71,7 +75,7 @@ export const set = (obj: any, path: string, value: any): any => {
     if (!(key in current) || typeof current[key] !== 'object') {
       current[key] = {}
     }
-    current = current[key]
+    current = current[key] as Record<string, unknown>
   }
 
   current[lastKey] = value

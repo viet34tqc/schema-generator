@@ -1,21 +1,18 @@
+import { SchemaField } from '@/types/schema'
+import { __ } from '@/utils/functions'
 import { ExternalLink } from 'lucide-react'
 import React from 'react'
-import { __ } from '../../utils/functions'
 
 interface SchemaDocsProps {
-  field: {
-    id: string
-    type: string
-    url: string
-    show?: boolean
-  }
-  value?: any
-  onChange?: (value: any) => void
+  field: SchemaField
+  value?: unknown
+  onChange?: (value: unknown) => void
   schemaId?: string
+  id?: string
 }
 
 const SchemaDocs: React.FC<SchemaDocsProps> = ({ field }) => {
-  if (!field.show) {
+  if (!field.show || !field.url) {
     return null
   }
 

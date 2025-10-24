@@ -9,15 +9,16 @@ A standalone React application for generating Schema.org structured data, conver
 - **Dynamic Data Variables**: Connect schema properties to dynamic variables like post title, site name, etc.
 - **Custom Properties**: Add custom properties to extend schemas beyond the default set
 - **Import/Export**: Backup and restore your schema configurations
-- **Modern UI**: Built with React 18, Tailwind CSS, and Headless UI components
+- **Modern UI**: Built with React 18, Tailwind CSS, and Radix UI components
 - **Local Storage**: All data is stored locally in your browser
+- **Theme Support**: Light, dark, and system theme modes
 
 ## Quick Start
 
 ### Prerequisites
 
-- Node.js 18+ 
-- npm or yarn
+- Node.js 18+
+- pnpm
 
 ### Installation
 
@@ -26,7 +27,7 @@ A standalone React application for generating Schema.org structured data, conver
 3. Install dependencies:
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### Development
@@ -34,7 +35,7 @@ npm install
 Start the development server:
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 The application will open at `http://localhost:3000`
@@ -44,7 +45,7 @@ The application will open at `http://localhost:3000`
 Build the application:
 
 ```bash
-npm run build
+pnpm build
 ```
 
 The built files will be in the `dist` directory.
@@ -52,7 +53,7 @@ The built files will be in the `dist` directory.
 ### Preview Production Build
 
 ```bash
-npm run preview
+pnpm preview
 ```
 
 ## Usage
@@ -69,7 +70,7 @@ npm run preview
 
 Each schema type comes with predefined properties based on Google's structured data guidelines:
 
-- **Required fields** are marked with a red asterisk (*)
+- **Required fields** are marked with a red asterisk (\*)
 - **Tooltips** provide additional information about each property
 - **Dynamic variables** can be used in text fields (e.g., `{{ post.title }}`, `{{ site.name }}`)
 
@@ -92,53 +93,61 @@ The application supports various dynamic variables:
 ### Technology Stack
 
 - **React 18** - UI framework
-- **Vite** - Build tool and dev server
+- **Vite 7** - Build tool and dev server
+- **TypeScript** - Type-safe development
 - **Tailwind CSS** - Utility-first CSS framework
-- **Headless UI** - Unstyled, accessible UI components
-- **Zustand** - State management (planned)
-- **React Hook Form** - Form handling (planned)
-- **Immer** - Immutable state updates
+- **Radix UI** - Unstyled, accessible UI components
+- **Zustand** - State management with persist middleware
+- **Immer** - Immutable state updates via Zustand middleware
+- **Lucide React** - Icon library
 
 ### Project Structure
 
 ```
 src/
 ├── api/                 # Mock API and data
-│   ├── mockApi.js      # API functions
-│   ├── mockData.js     # Static data
-│   └── schemaFields.js # Schema field definitions
+│   ├── mockData.ts     # Static data and schema types
+│   └── schemas/        # Schema field definitions
 ├── components/         # React components
 │   ├── Fields/         # Field type components
-│   ├── Schema.jsx      # Individual schema component
-│   ├── Schemas.jsx     # Schema list component
+│   ├── Schema.tsx      # Individual schema component
+│   ├── Schemas.tsx     # Schema list component
 │   └── ...
-├── contexts/           # React contexts
+├── constants/          # Application constants
+├── hooks/              # Custom React hooks
+├── stores/             # Zustand state management
+│   ├── schemaStore.ts  # Schema state and actions
+│   └── themeStore.ts   # Theme state and actions
+├── types/              # TypeScript type definitions
 ├── utils/              # Utility functions
 ├── styles/             # CSS files
-└── App.jsx            # Main app component
+└── App.tsx             # Main app component
 ```
 
 ### Data Storage
 
 All data is stored in the browser's localStorage:
 
-- **Schemas**: `schema_generator_schemas`
-- **Settings**: `schema_generator_settings`
+- **Schemas**: `schema-generator-store` (includes schemas and schema links)
+- **Theme**: `schema-generator-theme` (user's theme preference)
 
 ## Supported Schema Types
 
 ### E-commerce
+
 - Book
 - Product
 - Review
 - SoftwareApplication
 
 ### Organizations
+
 - HowTo
 - LocalBusiness
 - Organization
 
 ### Content
+
 - Article (and subtypes)
 - BlogPosting
 - NewsArticle
@@ -152,6 +161,7 @@ All data is stored in the browser's localStorage:
 - QAPage
 
 ### Basic
+
 - WebSite
 - WebPage
 - SearchAction
@@ -166,9 +176,10 @@ All data is stored in the browser's localStorage:
 
 ### Adding New Schema Types
 
-1. Add the schema type to `src/api/mockData.js` in the `schemaTypes` array
-2. Define the schema fields in `src/api/schemaFields.js`
-3. The schema will automatically appear in the dropdown
+1. Add the schema type to `src/constants/index.ts` in the `schemaTypes` array
+2. Define the schema fields in `src/api/schemas/` directory
+3. Export the schema from `src/api/schemas/index.ts`
+4. The schema will automatically appear in the dropdown
 
 ### Adding New Field Types
 

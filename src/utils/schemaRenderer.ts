@@ -3,11 +3,11 @@ import { Schema } from '../types/schema'
 /**
  * Renders a schema object as JSON-LD structured data
  */
-export function renderSchemaAsJsonLd(schema: Schema, schemaId: string): object {
+export function renderSchemaAsJsonLd(schema: Schema, schemaId: string): Record<string, unknown> {
   const { type, fields } = schema
 
   // Start with the basic schema structure
-  const jsonLd: any = {
+  const jsonLd: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': type,
   }
@@ -29,7 +29,11 @@ export function renderSchemaAsJsonLd(schema: Schema, schemaId: string): object {
       } else if (typeof value === 'object') {
         // Handle nested objects/groups
         const processedObject = processNestedObject(value)
-        if (Object.keys(processedObject).length > 0) {
+        if (
+          typeof processedObject === 'object' &&
+          processedObject !== null &&
+          Object.keys(processedObject as Record<string, unknown>).length > 0
+        ) {
           jsonLd[key] = processedObject
         }
       } else {
@@ -50,14 +54,16 @@ export function renderSchemaAsJsonLd(schema: Schema, schemaId: string): object {
 /**
  * Formats JSON-LD object for display with proper indentation
  */
-export function formatJsonLdForDisplay(jsonLd: object | object[]): string {
+export function formatJsonLdForDisplay(
+  jsonLd: Record<string, unknown> | Record<string, unknown>[],
+): string {
   return JSON.stringify(jsonLd, null, 2)
 }
 
 /**
  * Process nested objects recursively
  */
-function processNestedObject(obj: any): any {
+function processNestedObject(obj: unknown): unknown {
   if (Array.isArray(obj)) {
     return obj
       .map((item) => (typeof item === 'object' ? processNestedObject(item) : item))
@@ -65,7 +71,7 @@ function processNestedObject(obj: any): any {
   }
 
   if (typeof obj === 'object' && obj !== null) {
-    const processed: any = {}
+    const processed: Record<string, unknown> = {}
     Object.entries(obj).forEach(([key, value]) => {
       if (key.startsWith('_')) return // Skip internal fields
 
@@ -75,7 +81,9 @@ function processNestedObject(obj: any): any {
           if (
             Array.isArray(nestedProcessed)
               ? nestedProcessed.length > 0
-              : Object.keys(nestedProcessed).length > 0
+              : typeof nestedProcessed === 'object' &&
+                nestedProcessed !== null &&
+                Object.keys(nestedProcessed).length > 0
           ) {
             processed[key] = nestedProcessed
           }
@@ -93,6 +101,8 @@ function processNestedObject(obj: any): any {
 /**
  * Renders all schemas as a complete JSON-LD array
  */
-export function renderAllSchemasAsJsonLd(schemas: Record<string, Schema>): object[] {
+export function renderAllSchemasAsJsonLd(
+  schemas: Record<string, Schema>,
+): Record<string, unknown>[] {
   return Object.entries(schemas).map(([id, schema]) => renderSchemaAsJsonLd(schema, id))
 }

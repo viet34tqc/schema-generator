@@ -1,22 +1,26 @@
-import React from 'react'
-import { SchemaField } from '../../types/schema'
+import { SchemaField } from '@/types/schema'
+import React, { useCallback } from 'react'
 import Property from '../Property'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
 interface GroupFieldProps {
   field: SchemaField
-  value: any
-  onChange: (value: any) => void
+  value: Record<string, unknown>
+  onChange: (value: Record<string, unknown>) => void
   id?: string
   schemaId?: string
 }
 
 const Group: React.FC<GroupFieldProps> = ({ field, value, onChange, schemaId }) => {
-  const handleFieldChange = (fieldId: string, fieldValue: any) => {
-    const newValue = { ...value }
-    newValue[fieldId] = fieldValue
-    onChange(newValue)
-  }
+  // Memoize field change handler to prevent unnecessary re-renders
+  const handleFieldChange = useCallback(
+    (fieldId: string, fieldValue: unknown) => {
+      const newValue = { ...value }
+      newValue[fieldId] = fieldValue
+      onChange(newValue)
+    },
+    [value, onChange],
+  )
 
   if (!field.fields || field.fields.length === 0) {
     return <div className='text-sm text-muted-foreground'>No fields defined for this group</div>
@@ -28,7 +32,7 @@ const Group: React.FC<GroupFieldProps> = ({ field, value, onChange, schemaId }) 
       <div className='space-y-4'>
         {field.fields.map((subField) => (
           <Property
-            key={subField.id}
+            key={`${schemaId}-${field.id}-${subField.id}`}
             field={subField}
             value={value?.[subField.id] || subField.std || ''}
             onChange={(fieldValue) => handleFieldChange(subField.id, fieldValue)}
@@ -48,7 +52,7 @@ const Group: React.FC<GroupFieldProps> = ({ field, value, onChange, schemaId }) 
       <CardContent className='space-y-4'>
         {field.fields.map((subField) => (
           <Property
-            key={subField.id}
+            key={`${schemaId}-${field.id}-${subField.id}`}
             field={subField}
             value={value?.[subField.id] || subField.std || ''}
             onChange={(fieldValue) => handleFieldChange(subField.id, fieldValue)}
@@ -60,4 +64,12 @@ const Group: React.FC<GroupFieldProps> = ({ field, value, onChange, schemaId }) 
   )
 }
 
-export default Group
+// Memoize Group component to prevent unnecessary re-renders
+export default React.memo(Group, (prevProps, nextProps) => {
+  return (
+    prevProps.field === nextProps.field &&
+    prevProps.value === nextProps.value &&
+    prevProps.schemaId === nextProps.schemaId &&
+    prevProps.onChange === nextProps.onChange
+  )
+})

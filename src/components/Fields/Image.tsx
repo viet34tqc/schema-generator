@@ -1,5 +1,5 @@
+import { SchemaField } from '@/types/schema'
 import React from 'react'
-import { SchemaField } from '../../types/schema'
 import { Input } from '../ui/input'
 
 interface ImageFieldProps {

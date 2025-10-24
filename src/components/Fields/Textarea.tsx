@@ -1,18 +1,18 @@
-import React from 'react';
-import { Textarea as TextareaUI } from '../ui/textarea';
-import { SchemaField } from '../../types/schema';
+import { SchemaField } from '@/types/schema'
+import React from 'react'
+import { Textarea as TextareaUI } from '../ui/textarea'
 
 interface TextareaFieldProps {
-  field: SchemaField;
-  value: string;
-  onChange: (value: string) => void;
-  id?: string;
+  field: SchemaField
+  value: string
+  onChange: (value: string) => void
+  id?: string
 }
 
 const Textarea: React.FC<TextareaFieldProps> = ({ field, value, onChange, id }) => {
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    onChange(e.target.value);
-  };
+    onChange(e.target.value)
+  }
 
   return (
     <TextareaUI
@@ -23,7 +23,7 @@ const Textarea: React.FC<TextareaFieldProps> = ({ field, value, onChange, id }) 
       rows={field.rows || 4}
       required={field.required}
     />
-  );
-};
+  )
+}
 
-export default Textarea;
+export default Textarea

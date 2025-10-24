@@ -1,7 +1,7 @@
 export interface SchemaField {
   id: string
   label?: string
-  type: string
+  type?: string // Optional - defaults to 'Text' if not specified
   required?: boolean
   std?: string | string[]
   tooltip?: string
@@ -10,7 +10,7 @@ export interface SchemaField {
   options?:
     | Record<string, string>
     | Array<{ value: string; label: string }>
-    | Array<{ label: string; options: Record<string, string> }>
+    | Array<{ label: string; options: Record<string, string> | Record<string, string | undefined> }>
   fields?: SchemaField[]
   show?: boolean
   cloneable?: boolean
@@ -23,9 +23,9 @@ export interface SchemaField {
   hideGroupTitle?: boolean
 }
 
-export interface Schema {
+export interface Schema extends Record<string, unknown> {
   type: string
-  fields: Record<string, any>
+  fields: Record<string, unknown>
 }
 
 export interface SchemaType {

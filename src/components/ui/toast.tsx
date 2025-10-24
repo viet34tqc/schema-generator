@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, useCallback } from 'react'
-import { CheckCircle, XCircle, AlertCircle, X } from 'lucide-react'
-import { cn } from '../../lib/utils'
+import { cn } from '@/lib/utils'
+import { AlertCircle, CheckCircle, X, XCircle } from 'lucide-react'
+import React, { createContext, useCallback, useContext, useState } from 'react'
 import { Button } from './button'
 
 interface Toast {
@@ -33,8 +33,8 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const addToast = useCallback((toast: Omit<Toast, 'id'>) => {
     const id = Math.random().toString(36).substr(2, 9)
     const newToast = { ...toast, id }
-    
-    setToasts(prev => [...prev, newToast])
+
+    setToasts((prev) => [...prev, newToast])
 
     // Auto remove after duration
     const duration = toast.duration || 5000
@@ -44,7 +44,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [])
 
   const removeToast = useCallback((id: string) => {
-    setToasts(prev => prev.filter(toast => toast.id !== id))
+    setToasts((prev) => prev.filter((toast) => toast.id !== id))
   }, [])
 
   return (
@@ -61,8 +61,8 @@ const ToastContainer: React.FC = () => {
   if (toasts.length === 0) return null
 
   return (
-    <div className="fixed top-4 right-4 z-50 space-y-2">
-      {toasts.map(toast => (
+    <div className='fixed top-4 right-4 z-50 space-y-2'>
+      {toasts.map((toast) => (
         <ToastItem key={toast.id} toast={toast} onRemove={removeToast} />
       ))}
     </div>
@@ -100,23 +100,21 @@ const ToastItem: React.FC<{ toast: Toast; onRemove: (id: string) => void }> = ({
     <div
       className={cn(
         'flex items-start space-x-3 p-4 rounded-lg border shadow-lg max-w-sm',
-        variants[toast.variant]
+        variants[toast.variant],
       )}
     >
       <Icon className={cn('h-5 w-5 flex-shrink-0 mt-0.5', iconVariants[toast.variant])} />
-      <div className="flex-1 min-w-0">
-        <p className="font-medium text-sm">{toast.title}</p>
-        {toast.description && (
-          <p className="mt-1 text-sm opacity-90">{toast.description}</p>
-        )}
+      <div className='flex-1 min-w-0'>
+        <p className='font-medium text-sm'>{toast.title}</p>
+        {toast.description && <p className='mt-1 text-sm opacity-90'>{toast.description}</p>}
       </div>
       <Button
-        variant="ghost"
-        size="icon"
-        className="h-6 w-6 text-current opacity-70 hover:opacity-100"
+        variant='ghost'
+        size='icon'
+        className='h-6 w-6 text-current opacity-70 hover:opacity-100'
         onClick={() => onRemove(toast.id)}
       >
-        <X className="h-4 w-4" />
+        <X className='h-4 w-4' />
       </Button>
     </div>
   )

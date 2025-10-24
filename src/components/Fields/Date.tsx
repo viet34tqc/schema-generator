@@ -1,7 +1,7 @@
+import { cn } from '@/lib/utils'
+import { SchemaField } from '@/types/schema'
 import { Calendar } from 'lucide-react'
 import React, { useRef } from 'react'
-import { cn } from '../../lib/utils'
-import { SchemaField } from '../../types/schema'
 import { Input } from '../ui/input'
 
 interface DateFieldProps {

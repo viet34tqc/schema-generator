@@ -1,7 +1,7 @@
+import { useSetTheme, useTheme } from '@/hooks/useTheme'
+import { __ } from '@/utils/functions'
 import { Monitor, Moon, Sun } from 'lucide-react'
 import React from 'react'
-import { useTheme } from '../contexts/ThemeContext'
-import { __ } from '../utils/functions'
 import { Button } from './ui/button'
 import {
   DropdownMenu,
@@ -11,7 +11,8 @@ import {
 } from './ui/dropdown-menu'
 
 const ThemeToggle: React.FC = () => {
-  const { theme, setTheme } = useTheme()
+  const { theme } = useTheme()
+  const { setTheme } = useSetTheme()
 
   const themes = [
     {

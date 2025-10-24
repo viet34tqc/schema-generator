@@ -1,51 +1,53 @@
+import { useSchemas, useSchemaStore, useSchemaTypes } from '@/stores'
+import { __ } from '@/utils/functions'
 import { ChevronDown, Plus } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { useSchemas, useSchemaStore, useSchemaTypes } from '../stores/schemaStore'
-import { SchemaType as SchemaTypeData } from '../types/schema'
-import { __ } from '../utils/functions'
+import React, { useCallback, useMemo } from 'react'
 import Inserter from './Inserter'
 import SchemaComponent from './Schema'
 import { Button } from './ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from './ui/dropdown-menu'
 
 const Schemas = () => {
-  const [items, setItems] = useState<SchemaTypeData[]>([])
-
-  // Zustand store hooks
+  // Zustand store hooks - using granular selectors to prevent unnecessary re-renders
   const schemas = useSchemas()
   const schemaTypes = useSchemaTypes()
   const addSchema = useSchemaStore((state) => state.addSchema)
   const deleteSchema = useSchemaStore((state) => state.deleteSchema)
 
-  useEffect(() => {
-    // Load schema types from store
-    setItems(schemaTypes)
-  }, [schemaTypes])
+  // Memoize handlers to prevent unnecessary re-renders
+  const handleAddSchema = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>, onToggle: () => void) => {
+      onToggle()
+      const target = e.target as HTMLButtonElement
+      const type = target.dataset.value
+      const label = target.textContent?.trim() || type || 'Schema'
 
-  const handleAddSchema = (e: React.MouseEvent<HTMLButtonElement>, onToggle: () => void) => {
-    onToggle()
-    const target = e.target as HTMLButtonElement
-    const type = target.dataset.value
-    const label = target.textContent?.trim() || type || 'Schema'
+      if (type) {
+        // addSchema already updates schema links internally
+        addSchema(type, label)
+      }
+    },
+    [addSchema],
+  )
 
-    if (type) {
-      // addSchema already updates schema links internally
-      addSchema(type, label)
-    }
-  }
+  const handleDeleteSchema = useCallback(
+    (id: string) => {
+      // deleteSchema already removes schema links internally
+      deleteSchema(id)
+    },
+    [deleteSchema],
+  )
 
-  const handleDeleteSchema = (id: string) => {
-    // deleteSchema already removes schema links internally
-    deleteSchema(id)
-  }
+  // Memoize schema entries to avoid recalculating on every render
+  const schemaEntries = useMemo(() => Object.entries(schemas), [schemas])
 
-  const hasSchemas = Object.keys(schemas).length > 0
+  const hasSchemas = schemaEntries.length > 0
 
   return (
     <div className='space-y-6'>
       {hasSchemas ? (
         <div className='space-y-4'>
-          {Object.entries(schemas).map(([id, schema]) => (
+          {schemaEntries.map(([id, schema]) => (
             <SchemaComponent key={id} schema={schema} deleteProp={handleDeleteSchema} id={id} />
           ))}
         </div>
@@ -83,7 +85,12 @@ const Schemas = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className='w-80 p-0' onCloseAutoFocus={(e) => e.preventDefault()}>
-            <Inserter items={items} group={true} hasSearch={true} onSelect={handleAddSchema} />
+            <Inserter
+              items={schemaTypes}
+              group={true}
+              hasSearch={true}
+              onSelect={handleAddSchema}
+            />
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -91,4 +98,5 @@ const Schemas = () => {
   )
 }
 
-export default Schemas
+// Memoize Schemas component to prevent unnecessary re-renders
+export default React.memo(Schemas)

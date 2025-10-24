@@ -1,5 +1,5 @@
+import { SchemaField } from '@/types/schema'
 import React from 'react'
-import { SchemaField } from '../../types/schema'
 import {
   SelectContent,
   SelectGroup,
@@ -18,24 +18,36 @@ interface SelectFieldProps {
 }
 
 const Select: React.FC<SelectFieldProps> = ({ field, value, onChange, id }) => {
-  const renderOptions = (options: any) => {
+  const renderOptions = (
+    options:
+      | Record<string, string>
+      | Array<{ value: string; label: string }>
+      | Array<{ label: string; options: Record<string, string> }>,
+  ) => {
     if (Array.isArray(options)) {
       // Check if this is an array of grouped options (like Article.php structure)
-      if (options.length > 0 && options[0].label && options[0].options) {
-        return options.map((group, groupIndex) => (
-          <SelectGroup key={group.label || groupIndex}>
-            <SelectLabel>{group.label}</SelectLabel>
-            {Object.entries(group.options || {}).map(([key, optValue]) => (
-              <SelectItem key={key} value={key}>
-                {String(optValue)}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        ))
+      if (
+        options.length > 0 &&
+        'label' in options[0] &&
+        'options' in options[0] &&
+        typeof options[0].options === 'object'
+      ) {
+        return (options as Array<{ label: string; options: Record<string, string> }>).map(
+          (group, groupIndex) => (
+            <SelectGroup key={group.label || groupIndex}>
+              <SelectLabel>{group.label}</SelectLabel>
+              {Object.entries(group.options || {}).map(([key, optValue]) => (
+                <SelectItem key={key} value={key}>
+                  {String(optValue)}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          ),
+        )
       }
 
       // Handle array of simple options
-      return options.map((option, index) => (
+      return (options as Array<{ value: string; label: string }>).map((option, index) => (
         <SelectItem key={option.value || index} value={option.value}>
           {option.label}
         </SelectItem>
@@ -44,7 +56,7 @@ const Select: React.FC<SelectFieldProps> = ({ field, value, onChange, id }) => {
 
     if (typeof options === 'object') {
       // Handle simple key-value pairs
-      return Object.entries(options).map(([key, optValue]) => (
+      return Object.entries(options as Record<string, string>).map(([key, optValue]) => (
         <SelectItem key={key} value={key}>
           {String(optValue)}
         </SelectItem>
@@ -63,7 +75,14 @@ const Select: React.FC<SelectFieldProps> = ({ field, value, onChange, id }) => {
       <SelectTrigger id={id}>
         <SelectValue placeholder={field.placeholder || 'Select an option...'} />
       </SelectTrigger>
-      <SelectContent>{renderOptions(field.options)}</SelectContent>
+      <SelectContent>
+        {renderOptions(
+          field.options as
+            | Record<string, string>
+            | Array<{ value: string; label: string }>
+            | Array<{ label: string; options: Record<string, string> }>,
+        )}
+      </SelectContent>
     </SelectUI>
   )
 }

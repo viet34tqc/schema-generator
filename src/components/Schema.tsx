@@ -1,9 +1,10 @@
-import { ChevronDown, ChevronRight, ExternalLink, Trash2 } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
-import { getSchemaFieldDefinitions, useSchemaStore } from '../stores/schemaStore'
-import { Schema as SchemaType } from '../types/schema'
-import { __, get } from '../utils/functions'
-import { formatJsonLdForDisplay, renderSchemaAsJsonLd } from '../utils/schemaRenderer'
+import { getSchemaFieldDefinitions, useSchemaStore } from '@/stores'
+import { Schema as SchemaType } from '@/types/schema'
+import { __, get } from '@/utils/functions'
+import { formatJsonLdForDisplay, renderSchemaAsJsonLd } from '@/utils/schemaRenderer'
+import { getValidationSummary, validateSchemaFields } from '@/utils/validation'
+import { AlertCircle, ChevronDown, ChevronRight, ExternalLink, Trash2 } from 'lucide-react'
+import React, { useMemo, useState } from 'react'
 import SchemaTypeComponent from './SchemaType'
 import { Badge } from './ui/badge'
 import { Button } from './ui/button'
@@ -17,45 +18,44 @@ interface SchemaProps {
   id: string
 }
 
-const generateLiveJsonLd = (schema: any, schemaId: string): string => {
+const generateLiveJsonLd = (schema: SchemaType, schemaId: string): string => {
   try {
     const jsonLd = renderSchemaAsJsonLd(schema, schemaId)
     return formatJsonLdForDisplay(jsonLd)
-  } catch (error) {
+  } catch {
     return '// Error generating JSON-LD\n// Please check your schema configuration'
   }
 }
 
 const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id }) => {
-  const { updateSchema } = useSchemaStore()
+  // Use granular selector to only get updateSchema action
+  const updateSchema = useSchemaStore((state) => state.updateSchema)
   const { addToast } = useToast()
-  const [documentationUrl, setDocumentationUrl] = useState<string | null>(null)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [isExpanded, setIsExpanded] = useState(true)
+  const [showValidationErrors, setShowValidationErrors] = useState(false)
 
-  // Load schema fields to find documentation URL
-  useEffect(() => {
-    const loadDocumentationUrl = () => {
-      try {
-        const fieldData = getSchemaFieldDefinitions(schema.type)
-        if (fieldData && Array.isArray(fieldData)) {
-          const docsField = fieldData.find(
-            (field: any) =>
-              (field.type === 'SchemaDocs' || field.type === 'GoogleDocs') && field.url,
-          )
-          if (docsField && (docsField as any).url) {
-            setDocumentationUrl((docsField as any).url)
-          }
-        }
-      } catch (error) {
-        console.error('Error loading documentation URL:', error)
-      }
-    }
-
-    if (schema.type) {
-      loadDocumentationUrl()
+  // Memoize field definitions to avoid recalculating on every render
+  const fieldDefinitions = useMemo(() => {
+    try {
+      const fieldData = getSchemaFieldDefinitions(schema.type)
+      return fieldData && Array.isArray(fieldData) ? fieldData : []
+    } catch {
+      return []
     }
   }, [schema.type])
+
+  // Memoize documentation URL from field definitions
+  const documentationUrl = useMemo(() => {
+    try {
+      const docsField = fieldDefinitions.find(
+        (field) => (field.type === 'SchemaDocs' || field.type === 'GoogleDocs') && field.url,
+      )
+      return docsField?.url || null
+    } catch {
+      return null
+    }
+  }, [fieldDefinitions])
 
   const handleDelete = () => {
     setShowDeleteConfirm(true)
@@ -65,11 +65,25 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id }) => {
     deleteProp(id)
   }
 
-  const handleUpdateSchema = (path: string, value: any) => {
+  const handleUpdateSchema = (path: string, value: unknown) => {
     updateSchema(id, path, value)
   }
 
   const schemaLabel = get(schema, 'fields._label', schema.type)
+
+  // Memoize JSON-LD generation to prevent unnecessary recalculations
+  const jsonLdOutput = useMemo(() => generateLiveJsonLd(schema, id), [schema, id])
+
+  // Validate schema fields
+  const validationResult = useMemo(() => {
+    if (fieldDefinitions.length === 0) {
+      return { valid: true, errors: [] }
+    }
+    return validateSchemaFields(schema, fieldDefinitions)
+  }, [schema, fieldDefinitions])
+
+  const hasValidationErrors = !validationResult.valid
+  const validationSummary = getValidationSummary(validationResult.errors)
 
   return (
     <>
@@ -89,6 +103,21 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id }) => {
               </Button>
               <h3 className='text-lg font-medium'>{schemaLabel}</h3>
               <Badge variant='secondary'>{schema.type}</Badge>
+              {hasValidationErrors && (
+                <Badge
+                  variant='destructive'
+                  className='cursor-pointer'
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setShowValidationErrors(!showValidationErrors)
+                  }}
+                  title={validationSummary}
+                >
+                  <AlertCircle className='h-3 w-3 mr-1' />
+                  {validationResult.errors.length}{' '}
+                  {validationResult.errors.length === 1 ? 'issue' : 'issues'}
+                </Badge>
+              )}
             </div>
             <div className='flex items-center space-x-2'>
               {documentationUrl && (
@@ -118,6 +147,35 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id }) => {
 
         {isExpanded && (
           <CardContent>
+            {/* Validation Errors Display */}
+            {hasValidationErrors && showValidationErrors && (
+              <div className='mb-4 p-4 bg-destructive/10 border border-destructive/20 rounded-lg'>
+                <div className='flex items-start space-x-2'>
+                  <AlertCircle className='h-5 w-5 text-destructive mt-0.5 flex-shrink-0' />
+                  <div className='flex-1'>
+                    <h4 className='font-semibold text-destructive mb-2'>
+                      {__('Validation Issues')}
+                    </h4>
+                    <ul className='space-y-1 text-sm'>
+                      {validationResult.errors.map((error, index) => (
+                        <li key={index} className='text-muted-foreground'>
+                          • {error.message}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <Button
+                    variant='ghost'
+                    size='sm'
+                    onClick={() => setShowValidationErrors(false)}
+                    className='text-muted-foreground hover:text-foreground'
+                  >
+                    {__('Dismiss')}
+                  </Button>
+                </div>
+              </div>
+            )}
+
             <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6'>
               {/* Schema Fields Column */}
               <div className='space-y-4'>
@@ -136,15 +194,14 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id }) => {
                 <h3 className='text-lg font-semibold'>{__('Live JSON-LD Preview')}</h3>
                 <div className='bg-muted border rounded-lg p-4'>
                   <pre className='text-sm overflow-auto max-h-[70vh] text-foreground'>
-                    <code>{generateLiveJsonLd(schema, id)}</code>
+                    <code>{jsonLdOutput}</code>
                   </pre>
                   <div className='mt-3 flex justify-end'>
                     <Button
                       variant='outline'
                       size='sm'
                       onClick={() => {
-                        const jsonLd = generateLiveJsonLd(schema, id)
-                        navigator.clipboard.writeText(jsonLd)
+                        navigator.clipboard.writeText(jsonLdOutput)
                         addToast({
                           title: __('JSON-LD copied to clipboard!'),
                           variant: 'success',
@@ -177,4 +234,12 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id }) => {
   )
 }
 
-export default Schema
+// Memoize Schema component with custom comparison to prevent unnecessary re-renders
+export default React.memo(Schema, (prevProps, nextProps) => {
+  // Only re-render if schema content, id, or deleteProp function reference changes
+  return (
+    prevProps.id === nextProps.id &&
+    prevProps.schema === nextProps.schema &&
+    prevProps.deleteProp === nextProps.deleteProp
+  )
+})

@@ -1,15 +1,15 @@
+import { SchemaField } from '@/types/schema'
+import { __ } from '@/utils/functions'
 import { Plus, Trash2 } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
-import { SchemaField } from '../../types/schema'
-import { __ } from '../../utils/functions'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Property from '../Property'
 import { Button } from '../ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
 interface CloneableFieldProps {
   field: SchemaField
-  value: any[]
-  onChange: (value: any[]) => void
+  value: unknown[]
+  onChange: (value: unknown[]) => void
   schemaId: string
 }
 
@@ -19,7 +19,7 @@ const CloneableField: React.FC<CloneableFieldProps> = ({
   onChange,
   schemaId,
 }) => {
-  const [items, setItems] = useState<any[]>(() => {
+  const [items, setItems] = useState<unknown[]>(() => {
     // Ensure value is always an array
     const safeValue = Array.isArray(value) ? value : value ? [value] : []
     return safeValue
@@ -31,27 +31,44 @@ const CloneableField: React.FC<CloneableFieldProps> = ({
     setItems(safeValue)
   }, [value])
 
-  const handleItemChange = (index: number, newValue: any) => {
-    const newItems = [...items]
-    newItems[index] = newValue
-    setItems(newItems)
-    onChange(newItems)
-  }
+  // Memoize handlers to prevent unnecessary re-renders
+  const handleItemChange = useCallback(
+    (index: number, newValue: unknown) => {
+      const newItems = [...items]
+      newItems[index] = newValue
+      setItems(newItems)
+      onChange(newItems)
+    },
+    [items, onChange],
+  )
 
-  const handleAddItem = () => {
+  const handleAddItem = useCallback(() => {
     const newItems = [...items, field.std || '']
     setItems(newItems)
     onChange(newItems)
-  }
+  }, [items, field.std, onChange])
 
-  const handleRemoveItem = (index: number) => {
-    const newItems = items.filter((_, i) => i !== index)
-    setItems(newItems)
-    onChange(newItems)
-  }
+  const handleRemoveItem = useCallback(
+    (index: number) => {
+      const newItems = items.filter((_, i) => i !== index)
+      setItems(newItems)
+      onChange(newItems)
+    },
+    [items, onChange],
+  )
 
-  const itemLabel = field.label || 'Item'
-  // const canRemove = items.length > 0
+  // Memoize item label to avoid recalculation
+  const itemLabel = useMemo(() => field.label || 'Item', [field.label])
+
+  // Memoize field configuration for Property component
+  const propertyField = useMemo(
+    () => ({
+      ...field,
+      cloneable: false, // Prevent infinite recursion
+      label: '', // Remove label since it's in the card header
+    }),
+    [field],
+  )
 
   return (
     <div className='space-y-3'>
@@ -66,7 +83,7 @@ const CloneableField: React.FC<CloneableFieldProps> = ({
       ) : (
         <>
           {items.map((item, index) => (
-            <Card key={index} className='relative'>
+            <Card key={`${schemaId}-${field.id}-${index}`} className='relative'>
               <CardHeader className='pb-3'>
                 <div className='flex items-center justify-between'>
                   <CardTitle className='text-sm font-medium'>
@@ -86,11 +103,7 @@ const CloneableField: React.FC<CloneableFieldProps> = ({
               </CardHeader>
               <CardContent>
                 <Property
-                  field={{
-                    ...field,
-                    cloneable: false, // Prevent infinite recursion
-                    label: '', // Remove label since it's in the card header
-                  }}
+                  field={propertyField}
                   value={item}
                   onChange={(newValue) => handleItemChange(index, newValue)}
                   schemaId={schemaId}
@@ -109,4 +122,12 @@ const CloneableField: React.FC<CloneableFieldProps> = ({
   )
 }
 
-export default CloneableField
+// Memoize CloneableField component to prevent unnecessary re-renders
+export default React.memo(CloneableField, (prevProps, nextProps) => {
+  return (
+    prevProps.field === nextProps.field &&
+    prevProps.value === nextProps.value &&
+    prevProps.schemaId === nextProps.schemaId &&
+    prevProps.onChange === nextProps.onChange
+  )
+})

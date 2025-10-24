@@ -1,6 +1,6 @@
+import { __ } from '@/utils/functions'
 import { AlertTriangle } from 'lucide-react'
 import React from 'react'
-import { __ } from '../../utils/functions'
 import { Button } from './button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './dialog'
 

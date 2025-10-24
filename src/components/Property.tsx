@@ -32,14 +32,15 @@ const fieldComponents = {
 
 interface PropertyProps {
   field: SchemaField
-  value: any
-  onChange: (value: any) => void
+  value: unknown
+  onChange: (value: unknown) => void
   schemaId: string
 }
 
 const Property: React.FC<PropertyProps> = ({ field, value, onChange, schemaId }) => {
   // Handle cloneable fields
   if (field.cloneable) {
+    const arrayValue = Array.isArray(value) ? value : value ? [value] : []
     return (
       <div className='space-y-2'>
         {field.label && (
@@ -66,7 +67,7 @@ const Property: React.FC<PropertyProps> = ({ field, value, onChange, schemaId })
           </div>
         )}
         {field.description && <p className='text-sm text-muted-foreground'>{field.description}</p>}
-        <CloneableField field={field} value={value} onChange={onChange} schemaId={schemaId} />
+        <CloneableField field={field} value={arrayValue} onChange={onChange} schemaId={schemaId} />
       </div>
     )
   }
@@ -117,7 +118,7 @@ const Property: React.FC<PropertyProps> = ({ field, value, onChange, schemaId })
       <FieldComponent
         id={fieldId}
         field={field}
-        value={value}
+        value={value as string & Record<string, unknown>}
         onChange={onChange}
         schemaId={schemaId}
       />
@@ -125,4 +126,13 @@ const Property: React.FC<PropertyProps> = ({ field, value, onChange, schemaId })
   )
 }
 
-export default Property
+// Memoize Property component to prevent unnecessary re-renders
+export default React.memo(Property, (prevProps, nextProps) => {
+  // Only re-render if field, value, schemaId, or onChange function reference changes
+  return (
+    prevProps.field === nextProps.field &&
+    prevProps.value === nextProps.value &&
+    prevProps.schemaId === nextProps.schemaId &&
+    prevProps.onChange === nextProps.onChange
+  )
+})
