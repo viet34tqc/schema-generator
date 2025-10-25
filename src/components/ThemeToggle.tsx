@@ -1,5 +1,4 @@
 import { useSetTheme, useTheme } from '@/hooks/useTheme'
-import { __ } from '@/utils/functions'
 import { Monitor, Moon, Sun } from 'lucide-react'
 import React from 'react'
 import { Button } from './ui/button'
@@ -17,17 +16,17 @@ const ThemeToggle: React.FC = () => {
   const themes = [
     {
       value: 'light' as const,
-      label: __('Light'),
+      label: 'Light',
       icon: Sun,
     },
     {
       value: 'dark' as const,
-      label: __('Dark'),
+      label: 'Dark',
       icon: Moon,
     },
     {
       value: 'system' as const,
-      label: __('System'),
+      label: 'System',
       icon: Monitor,
     },
   ]
@@ -38,9 +37,9 @@ const ThemeToggle: React.FC = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant='ghost' size='icon' className='h-9 w-9' title={__('Toggle theme')}>
+        <Button variant='ghost' size='icon' className='h-9 w-9' title='Toggle theme'>
           <CurrentIcon className='h-4 w-4' />
-          <span className='sr-only'>{__('Toggle theme')}</span>
+          <span className='sr-only'>Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' className='w-40'>

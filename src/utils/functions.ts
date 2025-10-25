@@ -3,47 +3,6 @@ import { nanoid } from 'nanoid'
 // Generate unique ID (replaces WordPress uniqueID function)
 export const uniqueID = (): string => nanoid()
 
-// Mock data functions for components that still need them
-export const getMockTerms = (searchTerm?: string) => {
-  const terms = [
-    { value: '1', label: 'Technology' },
-    { value: '2', label: 'Business' },
-    { value: '3', label: 'Health' },
-    { value: '4', label: 'Education' },
-    { value: '5', label: 'Entertainment' },
-  ]
-  return searchTerm
-    ? terms.filter((term) => term.label.toLowerCase().includes(searchTerm.toLowerCase()))
-    : terms
-}
-
-export const getMockPosts = (searchTerm?: string) => {
-  const posts = [
-    { value: '1', label: 'Sample Post 1' },
-    { value: '2', label: 'Sample Post 2' },
-    { value: '3', label: 'About Us Page' },
-    { value: '4', label: 'Contact Page' },
-    { value: '5', label: 'Blog Post Example' },
-  ]
-  return searchTerm
-    ? posts.filter((post) => post.label.toLowerCase().includes(searchTerm.toLowerCase()))
-    : posts
-}
-
-export const getMockMetaKeys = () => [
-  'custom_field_1',
-  'custom_field_2',
-  'seo_title',
-  'seo_description',
-]
-
-// Translation function (replaces WordPress __)
-export const __ = (text: string): string => {
-  // For now, just return the text as-is
-  // In a real implementation, you could add i18n support here
-  return text
-}
-
 // Utility function to get nested object property safely with proper typing
 export const get = <T = unknown>(
   obj: Record<string, unknown>,
@@ -101,7 +60,7 @@ export const formatDate = (date: string | Date | null | undefined): string => {
 
   try {
     return new Date(date).toLocaleDateString()
-  } catch (error) {
+  } catch {
     return String(date)
   }
 }
@@ -111,7 +70,7 @@ export const isValidJSON = (str: string): boolean => {
   try {
     JSON.parse(str)
     return true
-  } catch (error) {
+  } catch {
     return false
   }
 }
@@ -133,7 +92,7 @@ export const deepClone = <T>(obj: T): T => {
   if (typeof obj === 'object') {
     const cloned: any = {}
     for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
         cloned[key] = deepClone((obj as any)[key])
       }
     }
@@ -172,7 +131,7 @@ export const parseUploadedFile = (file: File): Promise<any> => {
         } else {
           reject(new Error('Invalid file content'))
         }
-      } catch (error) {
+      } catch {
         reject(new Error('Invalid JSON file'))
       }
     }

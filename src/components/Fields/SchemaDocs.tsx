@@ -1,5 +1,4 @@
 import { SchemaField } from '@/types/schema'
-import { __ } from '@/utils/functions'
 import { ExternalLink } from 'lucide-react'
 import React from 'react'
 
@@ -24,7 +23,7 @@ const SchemaDocs: React.FC<SchemaDocsProps> = ({ field }) => {
         rel='noopener noreferrer'
         className='inline-flex items-center text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 font-medium text-sm transition-colors'
       >
-        {__('Schema.org documentation')}
+        Schema.org documentation
         <ExternalLink className='ml-1 h-4 w-4' />
       </a>
     </div>

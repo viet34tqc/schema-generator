@@ -49,7 +49,6 @@ interface SchemaStore {
 }
 
 export const useSchemaStore = create<SchemaStore>()(
-  // @ts-expect-error - Zustand v5 middleware type inference issue
   persist(
     immer((set, get) => ({
       // Initial state

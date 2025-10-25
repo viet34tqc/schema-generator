@@ -1,5 +1,4 @@
 import { SchemaField } from '@/types/schema'
-import { __ } from '@/utils/functions'
 import { ExternalLink } from 'lucide-react'
 import React from 'react'
 
@@ -24,7 +23,7 @@ const GoogleDocs: React.FC<GoogleDocsProps> = ({ field }) => {
         rel='noopener noreferrer'
         className='inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium text-sm transition-colors'
       >
-        {__('Google documentation')}
+        Google documentation
         <ExternalLink className='ml-1 h-4 w-4' />
       </a>
     </div>

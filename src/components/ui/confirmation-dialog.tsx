@@ -1,4 +1,3 @@
-import { __ } from '@/utils/functions'
 import { AlertTriangle } from 'lucide-react'
 import React from 'react'
 import { Button } from './button'
@@ -18,10 +17,10 @@ interface ConfirmationDialogProps {
 const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   open,
   onOpenChange,
-  title = __('Are you sure?'),
-  description = __('This action cannot be undone.'),
-  confirmText = __('Confirm'),
-  cancelText = __('Cancel'),
+  title = 'Are you sure?',
+  description = 'This action cannot be undone.',
+  confirmText = 'Confirm',
+  cancelText = 'Cancel',
   onConfirm,
   variant = 'default',
 }) => {

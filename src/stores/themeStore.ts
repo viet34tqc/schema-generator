@@ -26,7 +26,6 @@ const updateDOMTheme = (theme: Theme): 'light' | 'dark' => {
 }
 
 export const useThemeStore = create<ThemeStore>()(
-  // @ts-expect-error - Zustand v5 middleware type inference issue
   persist(
     (set, get) => ({
       theme: 'system' as Theme,

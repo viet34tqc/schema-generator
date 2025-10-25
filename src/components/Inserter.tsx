@@ -4,7 +4,6 @@ import { DropdownMenuItem } from './ui/dropdown-menu'
 import { Input } from './ui/input'
 
 import { SchemaType } from '@/types/schema'
-import { __ } from '@/utils/functions'
 
 interface InserterProps {
   items?: SchemaType[]
@@ -154,7 +153,7 @@ const Inserter: React.FC<InserterProps> = ({
               <Input
                 ref={searchInputRef}
                 type='text'
-                placeholder={__('Search schemas...')}
+                placeholder='Search schemas...'
                 value={searchTerm}
                 onChange={handleSearchChange}
                 onFocus={handleSearchFocus}
@@ -170,7 +169,7 @@ const Inserter: React.FC<InserterProps> = ({
 
         {filteredItems.length === 0 ? (
           <div className='p-4 text-center text-muted-foreground text-sm'>
-            {searchTerm ? __('No schemas found') : __('No schemas available')}
+            {searchTerm ? 'No schemas found' : 'No schemas available'}
           </div>
         ) : (
           filteredItems.map((groupItem, groupIndex) => (
@@ -216,7 +215,7 @@ const Inserter: React.FC<InserterProps> = ({
             <Input
               ref={searchInputRef}
               type='text'
-              placeholder={__('Search...')}
+              placeholder='Search...'
               value={searchTerm}
               onChange={handleSearchChange}
               onFocus={handleSearchFocus}
@@ -232,7 +231,7 @@ const Inserter: React.FC<InserterProps> = ({
 
       {filteredItems.length === 0 ? (
         <div className='p-4 text-center text-muted-foreground text-sm'>
-          {searchTerm ? __('No items found') : __('No items available')}
+          {searchTerm ? 'No items found' : 'No items available'}
         </div>
       ) : (
         <div className='py-1'>

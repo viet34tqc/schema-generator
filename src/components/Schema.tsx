@@ -1,6 +1,6 @@
 import { getSchemaFieldDefinitions, useSchemaStore } from '@/stores'
 import { Schema as SchemaType } from '@/types/schema'
-import { __, get } from '@/utils/functions'
+import { get } from '@/utils/functions'
 import { formatJsonLdForDisplay, renderSchemaAsJsonLd } from '@/utils/schemaRenderer'
 import { getValidationSummary, validateSchemaFields } from '@/utils/validation'
 import { AlertCircle, ChevronDown, ChevronRight, ExternalLink, Trash2 } from 'lucide-react'
@@ -121,7 +121,7 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id }) => {
             </div>
             <div className='flex items-center space-x-2'>
               {documentationUrl && (
-                <Button variant='ghost' size='icon' asChild title={__('View documentation')}>
+                <Button variant='ghost' size='icon' asChild title='View documentation'>
                   <a
                     href={documentationUrl}
                     target='_blank'
@@ -137,7 +137,7 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id }) => {
                 size='icon'
                 onClick={handleDelete}
                 className='text-destructive hover:text-destructive'
-                title={__('Delete schema')}
+                title='Delete schema'
               >
                 <Trash2 className='h-4 w-4' />
               </Button>
@@ -153,9 +153,7 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id }) => {
                 <div className='flex items-start space-x-2'>
                   <AlertCircle className='h-5 w-5 text-destructive mt-0.5 flex-shrink-0' />
                   <div className='flex-1'>
-                    <h4 className='font-semibold text-destructive mb-2'>
-                      {__('Validation Issues')}
-                    </h4>
+                    <h4 className='font-semibold text-destructive mb-2'>Validation Issues</h4>
                     <ul className='space-y-1 text-sm'>
                       {validationResult.errors.map((error, index) => (
                         <li key={index} className='text-muted-foreground'>
@@ -170,7 +168,7 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id }) => {
                     onClick={() => setShowValidationErrors(false)}
                     className='text-muted-foreground hover:text-foreground'
                   >
-                    {__('Dismiss')}
+                    Dismiss
                   </Button>
                 </div>
               </div>
@@ -179,7 +177,7 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id }) => {
             <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6'>
               {/* Schema Fields Column */}
               <div className='space-y-4'>
-                <h3 className='text-lg font-semibold'>{__('Schema Properties')}</h3>
+                <h3 className='text-lg font-semibold'>Schema Properties</h3>
                 <div className='max-h-[70vh] overflow-y-auto pr-2'>
                   <SchemaTypeComponent
                     schema={schema}
@@ -191,7 +189,7 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id }) => {
 
               {/* Live JSON-LD Preview Column */}
               <div className='space-y-4'>
-                <h3 className='text-lg font-semibold'>{__('Live JSON-LD Preview')}</h3>
+                <h3 className='text-lg font-semibold'>Live JSON-LD Preview</h3>
                 <div className='bg-muted border rounded-lg p-4'>
                   <pre className='text-sm overflow-auto max-h-[70vh] text-foreground'>
                     <code>{jsonLdOutput}</code>
@@ -203,12 +201,12 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id }) => {
                       onClick={() => {
                         navigator.clipboard.writeText(jsonLdOutput)
                         addToast({
-                          title: __('JSON-LD copied to clipboard!'),
+                          title: 'JSON-LD copied to clipboard!',
                           variant: 'success',
                         })
                       }}
                     >
-                      {__('Copy JSON-LD')}
+                      Copy JSON-LD
                     </Button>
                   </div>
                 </div>
@@ -221,12 +219,10 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id }) => {
       <ConfirmationDialog
         open={showDeleteConfirm}
         onOpenChange={setShowDeleteConfirm}
-        title={__('Delete Schema')}
-        description={__(
-          'Are you sure you want to delete this schema? This action cannot be undone.',
-        )}
-        confirmText={__('Delete')}
-        cancelText={__('Cancel')}
+        title='Delete Schema'
+        description='Are you sure you want to delete this schema? This action cannot be undone.'
+        confirmText='Delete'
+        cancelText='Cancel'
         onConfirm={confirmDelete}
         variant='destructive'
       />

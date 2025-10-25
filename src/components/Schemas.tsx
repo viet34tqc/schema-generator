@@ -1,5 +1,4 @@
 import { useSchemas, useSchemaStore, useSchemaTypes } from '@/stores'
-import { __ } from '@/utils/functions'
 import { ChevronDown, Plus } from 'lucide-react'
 import React, { useCallback, useMemo } from 'react'
 import Inserter from './Inserter'
@@ -68,9 +67,9 @@ const Schemas = () => {
               />
             </svg>
           </div>
-          <p className='text-muted-foreground text-lg mb-4'>{__('There are no schemas here.')}</p>
+          <p className='text-muted-foreground text-lg mb-4'>There are no schemas here.</p>
           <p className='text-muted-foreground/70 text-sm'>
-            {__('Click the "Add Schema" button to add a new schema.')}
+            Click the "Add Schema" button to add a new schema.
           </p>
         </div>
       )}
@@ -80,7 +79,7 @@ const Schemas = () => {
           <DropdownMenuTrigger asChild>
             <Button variant='outline'>
               <Plus className='w-4 h-4 mr-2' />
-              {__('Add Schema')}
+              Add Schema
               <ChevronDown className='w-4 h-4 ml-2' />
             </Button>
           </DropdownMenuTrigger>

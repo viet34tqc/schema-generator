@@ -1,5 +1,4 @@
 import { SchemaField } from '@/types/schema'
-import { __ } from '@/utils/functions'
 import { Plus, Trash2 } from 'lucide-react'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Property from '../Property'
@@ -74,10 +73,10 @@ const CloneableField: React.FC<CloneableFieldProps> = ({
     <div className='space-y-3'>
       {items.length === 0 ? (
         <div className='text-center py-6 border-2 border-dashed border-border rounded-lg'>
-          <p className='text-muted-foreground text-sm mb-3'>{__('No items added yet')}</p>
+          <p className='text-muted-foreground text-sm mb-3'>No items added yet</p>
           <Button type='button' variant='outline' onClick={handleAddItem}>
             <Plus className='h-4 w-4 mr-2' />
-            {__('Add')} {itemLabel}
+            Add {itemLabel}
           </Button>
         </div>
       ) : (
@@ -95,7 +94,7 @@ const CloneableField: React.FC<CloneableFieldProps> = ({
                     size='sm'
                     onClick={() => handleRemoveItem(index)}
                     className='text-destructive hover:text-destructive'
-                    title={__('Remove item')}
+                    title='Remove item'
                   >
                     <Trash2 className='h-4 w-4' />
                   </Button>
@@ -114,7 +113,7 @@ const CloneableField: React.FC<CloneableFieldProps> = ({
 
           <Button type='button' variant='outline' onClick={handleAddItem} className='w-full'>
             <Plus className='h-4 w-4 mr-2' />
-            {__('Add')} {itemLabel}
+            Add {itemLabel}
           </Button>
         </>
       )}

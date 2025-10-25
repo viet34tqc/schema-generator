@@ -1,6 +1,6 @@
 import { getSchemaFieldDefinitions } from '@/stores'
 import { Schema, SchemaField } from '@/types/schema'
-import { __, get } from '@/utils/functions'
+import { get } from '@/utils/functions'
 import React, { useCallback, useMemo } from 'react'
 import Panel from './Panel'
 import Property from './Property'
@@ -88,7 +88,7 @@ const SchemaType: React.FC<SchemaTypeProps> = ({ schema, updateSchema, schemaId 
   if (!fields.length) {
     return (
       <div className='text-center py-8'>
-        <p className='text-muted-foreground'>{__('No fields available for this schema type.')}</p>
+        <p className='text-muted-foreground'>No fields available for this schema type.</p>
       </div>
     )
   }
