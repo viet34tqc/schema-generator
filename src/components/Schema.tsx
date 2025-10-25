@@ -109,6 +109,11 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id }) => {
                   className='cursor-pointer'
                   onClick={(e) => {
                     e.stopPropagation()
+                    // If schema is collapsed, expand it first
+                    if (!isExpanded) {
+                      setIsExpanded(true)
+                    }
+                    // Toggle validation errors display
                     setShowValidationErrors(!showValidationErrors)
                   }}
                   title={validationSummary}

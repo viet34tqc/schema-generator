@@ -4,7 +4,7 @@ export const commonProperties = {
     id: '@context',
     std: 'https://schema.org',
     type: 'Hidden',
-    required: true,
+    required: false, // Not required in validation since it's auto-provided by the renderer
   },
 
   type: (schemaType: string) => ({
