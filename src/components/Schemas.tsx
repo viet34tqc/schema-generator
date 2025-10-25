@@ -69,7 +69,7 @@ const Schemas = () => {
           </div>
           <p className='text-muted-foreground text-lg mb-4'>There are no schemas here.</p>
           <p className='text-muted-foreground/70 text-sm'>
-            Click the "Add Schema" button to add a new schema.
+            Click the &quot;Add Schema&quot; button to add a new schema.
           </p>
         </div>
       )}

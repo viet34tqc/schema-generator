@@ -189,7 +189,7 @@ const ImportExport: React.FC = () => {
           <div>
             <h4 className='font-medium mb-2'>Export Process</h4>
             <ul className='text-sm text-muted-foreground space-y-1 list-disc list-inside'>
-              <li>Click "Export All Schemas" to download your current schemas</li>
+              <li>Click &quot;Export All Schemas&quot; to download your current schemas</li>
               <li>The file will be saved with the current date in the filename</li>
               <li>Store this file safely as a backup of your schema configurations</li>
             </ul>
@@ -198,7 +198,7 @@ const ImportExport: React.FC = () => {
           <div>
             <h4 className='font-medium mb-2'>Import Process</h4>
             <ul className='text-sm text-muted-foreground space-y-1 list-disc list-inside'>
-              <li>Click "Choose File to Import" and select a valid JSON export file</li>
+              <li>Click &quot;Choose File to Import&quot; and select a valid JSON export file</li>
               <li>Imported schemas will be merged with your existing schemas</li>
               <li>If a schema with the same ID exists, it will be overwritten</li>
               <li>The page will refresh automatically after successful import</li>

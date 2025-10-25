@@ -10,7 +10,7 @@ import { Badge } from './ui/badge'
 import { Button } from './ui/button'
 import { Card, CardContent, CardHeader } from './ui/card'
 import ConfirmationDialog from './ui/confirmation-dialog'
-import { useToast } from './ui/toast'
+import { useToast } from './ui/use-toast'
 
 interface SchemaProps {
   schema: SchemaType
