@@ -72,6 +72,11 @@ const Property: React.FC<PropertyProps> = ({ field, value, onChange, schemaId })
     )
   }
 
+  // Don't render documentation fields (they're shown in the header)
+  if (field.type === 'GoogleDocs' || field.type === 'SchemaDocs') {
+    return null
+  }
+
   // Get the field component directly - no loading needed
   const FieldComponent =
     fieldComponents[field.type as keyof typeof fieldComponents] || fieldComponents.Text

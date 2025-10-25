@@ -3,14 +3,15 @@ import { Schema as SchemaType } from '@/types/schema'
 import { get } from '@/utils/functions'
 import { formatJsonLdForDisplay, renderSchemaAsJsonLd } from '@/utils/schemaRenderer'
 import { getValidationSummary, validateSchemaFields } from '@/utils/validation'
-import { AlertCircle, ChevronDown, ChevronRight, ExternalLink, Trash2 } from 'lucide-react'
+import { AlertCircle, ChevronDown, ChevronRight, Trash2 } from 'lucide-react'
 import React, { useMemo, useState } from 'react'
-import SchemaTypeComponent from './SchemaType'
-import { Badge } from './ui/badge'
-import { Button } from './ui/button'
-import { Card, CardContent, CardHeader } from './ui/card'
-import ConfirmationDialog from './ui/confirmation-dialog'
-import { useToast } from './ui/use-toast'
+import SchemaTypeComponent from '../SchemaType'
+import { Badge } from '../ui/badge'
+import { Button } from '../ui/button'
+import { Card, CardContent, CardHeader } from '../ui/card'
+import ConfirmationDialog from '../ui/confirmation-dialog'
+import { useToast } from '../ui/use-toast'
+import DocumentationButtons from './DocumentationButtons'
 
 interface SchemaProps {
   schema: SchemaType
@@ -37,25 +38,9 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id }) => {
 
   // Memoize field definitions to avoid recalculating on every render
   const fieldDefinitions = useMemo(() => {
-    try {
-      const fieldData = getSchemaFieldDefinitions(schema.type)
-      return fieldData && Array.isArray(fieldData) ? fieldData : []
-    } catch {
-      return []
-    }
+    const fieldData = getSchemaFieldDefinitions(schema.type)
+    return fieldData && Array.isArray(fieldData) ? fieldData : []
   }, [schema.type])
-
-  // Memoize documentation URL from field definitions
-  const documentationUrl = useMemo(() => {
-    try {
-      const docsField = fieldDefinitions.find(
-        (field) => (field.type === 'SchemaDocs' || field.type === 'GoogleDocs') && field.url,
-      )
-      return docsField?.url || null
-    } catch {
-      return null
-    }
-  }, [fieldDefinitions])
 
   const handleDelete = () => {
     setShowDeleteConfirm(true)
@@ -88,12 +73,9 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id }) => {
   return (
     <>
       <Card>
-        <CardHeader>
+        <CardHeader onClick={() => setIsExpanded(!isExpanded)} className='cursor-pointer'>
           <div className='flex items-center justify-between'>
-            <div
-              className='flex items-center space-x-3 cursor-pointer flex-1'
-              onClick={() => setIsExpanded(!isExpanded)}
-            >
+            <div className='flex items-center space-x-3 flex-1'>
               <Button variant='ghost' size='icon' className='h-6 w-6'>
                 {isExpanded ? (
                   <ChevronDown className='h-4 w-4' />
@@ -102,7 +84,6 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id }) => {
                 )}
               </Button>
               <h3 className='text-lg font-medium'>{schemaLabel}</h3>
-              <Badge variant='secondary'>{schema.type}</Badge>
               {hasValidationErrors && (
                 <Badge
                   variant='destructive'
@@ -125,18 +106,7 @@ const Schema: React.FC<SchemaProps> = ({ schema, deleteProp, id }) => {
               )}
             </div>
             <div className='flex items-center space-x-2'>
-              {documentationUrl && (
-                <Button variant='ghost' size='icon' asChild title='View documentation'>
-                  <a
-                    href={documentationUrl}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className='text-muted-foreground hover:text-foreground'
-                  >
-                    <ExternalLink className='h-4 w-4' />
-                  </a>
-                </Button>
-              )}
+              <DocumentationButtons fieldDefinitions={fieldDefinitions} />
               <Button
                 variant='ghost'
                 size='icon'

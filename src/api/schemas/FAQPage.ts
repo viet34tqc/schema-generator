@@ -5,7 +5,7 @@ export default [
     id: 'googleDocs',
     type: 'GoogleDocs',
     url: 'https://developers.google.com/search/docs/advanced/structured-data/faqpage',
-    show: false,
+    show: true,
   },
   commonProperties.context,
   commonProperties.type('FAQPage'),

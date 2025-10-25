@@ -5,7 +5,7 @@ export default [
     id: 'schemaDocs',
     type: 'SchemaDocs',
     url: 'https://schema.org/Organization',
-    show: false,
+    show: true,
   },
   commonProperties.context,
   commonProperties.type('Organization'),
