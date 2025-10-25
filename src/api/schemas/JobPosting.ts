@@ -13,7 +13,6 @@ export default [
     id: 'title',
     label: 'Title',
     required: true,
-    std: '{{ post.title }}',
     tooltip: 'The title of the job (not the title of the posting).',
   },
   {

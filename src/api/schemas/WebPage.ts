@@ -25,18 +25,15 @@ export default [
   {
     ...commonProperties.name,
     required: true,
-    std: '{{ current.title }}',
     tooltip: 'The name of the webpage.',
   },
   {
     ...commonProperties.description,
-    std: '{{ current.description }}',
     tooltip: 'The description of the webpage.',
   },
   {
     ...commonProperties.url,
     required: true,
-    std: '{{ current.url }}',
   },
   {
     id: 'mainEntity',

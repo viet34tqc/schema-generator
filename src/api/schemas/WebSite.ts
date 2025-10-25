@@ -6,20 +6,17 @@ export default [
   {
     id: '@id',
     type: 'Hidden',
-    std: '{{ site.url }}#{{ id }}',
     required: true,
   },
   {
     ...commonProperties.name,
     required: true,
-    std: '{{ site.title }}',
     tooltip: 'The name of the website.',
   },
   {
     id: 'author',
     label: 'Author',
     tooltip: 'The author of the website.',
-    std: '{{ schemas.person }}',
   },
   {
     id: 'about',

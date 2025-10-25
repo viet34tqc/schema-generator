@@ -17,7 +17,6 @@ export const commonProperties = {
   id: {
     label: 'ID',
     id: '@id',
-    std: '{{ post.url }}',
     tooltip: 'A unique identifier for the item.',
     type: 'Hidden',
   },
@@ -25,7 +24,6 @@ export const commonProperties = {
   name: {
     label: 'Name',
     id: 'name',
-    std: '{{ post.title }}',
     tooltip: 'The name of the item.',
   },
 
@@ -33,14 +31,12 @@ export const commonProperties = {
     label: 'Description',
     id: 'description',
     type: 'Textarea',
-    std: '{{ post.excerpt }}',
     tooltip: 'A description of the item.',
   },
 
   url: {
     label: 'URL',
     id: 'url',
-    std: '{{ post.url }}',
     tooltip: 'URL of the item.',
   },
 
@@ -48,7 +44,6 @@ export const commonProperties = {
     label: 'Image',
     id: 'image',
     type: 'Image',
-    std: '{{ post.thumbnail }}',
     cloneable: true,
     tooltip: 'An image of the item.',
   },
@@ -68,13 +63,11 @@ export const commonProperties = {
       {
         id: 'name',
         label: 'Name',
-        std: '{{ author.display_name }}',
         required: true,
       },
       {
         id: 'url',
         label: 'URL',
-        std: '{{ author.url }}',
       },
     ],
   },
@@ -83,7 +76,6 @@ export const commonProperties = {
     label: 'Date published',
     id: 'datePublished',
     type: 'Date',
-    std: '{{ post.date }}',
     tooltip: 'Date of first publication.',
   },
 
@@ -91,7 +83,6 @@ export const commonProperties = {
     label: 'Date modified',
     id: 'dateModified',
     type: 'Date',
-    std: '{{ post.modified }}',
     tooltip: 'The date on which the item was most recently modified.',
   },
 
@@ -110,14 +101,12 @@ export const commonProperties = {
       {
         id: 'name',
         label: 'Name',
-        std: '{{ site.name }}',
         required: true,
       },
       {
         id: 'logo',
         label: 'Logo',
         type: 'Image',
-        std: '{{ site.logo }}',
       },
     ],
   },
@@ -137,7 +126,6 @@ export const commonProperties = {
       },
       {
         id: '@id',
-        std: '{{ post.url }}',
         required: true,
       },
     ],
@@ -146,28 +134,24 @@ export const commonProperties = {
   headline: {
     label: 'Headline',
     id: 'headline',
-    std: '{{ post.title }}',
     tooltip: 'Headline of the article.',
   },
 
   wordCount: {
     label: 'Word count',
     id: 'wordCount',
-    std: '{{ post.word_count }}',
     tooltip: 'The number of words in the text of the Article.',
   },
 
   inLanguage: {
     label: 'In language',
     id: 'inLanguage',
-    std: '{{ site.language }}',
     tooltip: 'The language of the content.',
   },
 
   keywords: {
     label: 'Keywords',
     id: 'keywords',
-    std: '{{ post.tags }}',
     tooltip: 'Keywords or tags used to describe this content.',
   },
 

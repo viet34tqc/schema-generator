@@ -82,7 +82,6 @@ export default [
             type: 'Date',
             show: true,
             tooltip: 'The date the movie was released in ISO 8601 format.',
-            std: '{{ post.date }}',
           },
           {
             id: 'director',
@@ -125,7 +124,6 @@ export default [
           {
             ...commonProperties.url,
             tooltip: 'The link to the movie.',
-            std: '{{ post.url }}',
             required: true,
           },
         ],

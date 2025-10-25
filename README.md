@@ -72,16 +72,7 @@ Each schema type comes with predefined properties based on Google's structured d
 
 - **Required fields** are marked with a red asterisk (\*)
 - **Tooltips** provide additional information about each property
-- **Dynamic variables** can be used in text fields (e.g., `{{ post.title }}`, `{{ site.name }}`)
-
-### Available Variables
-
-The application supports various dynamic variables:
-
-- **Post**: `{{ post.title }}`, `{{ post.content }}`, `{{ post.url }}`, etc.
-- **Site**: `{{ site.name }}`, `{{ site.url }}`, `{{ site.description }}`, etc.
-- **Author**: `{{ author.name }}`, `{{ author.url }}`, `{{ author.bio }}`, etc.
-- **Current**: `{{ current.date }}`, `{{ current.year }}`, `{{ current.url }}`, etc.
+- **Validation** ensures all required fields are filled before saving
 
 ### Import/Export
 

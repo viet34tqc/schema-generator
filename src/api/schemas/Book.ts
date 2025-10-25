@@ -48,7 +48,6 @@ export default [
         label: '@id',
         id: '@id',
         required: true,
-        std: '{{ post.url }}',
       },
       {
         id: 'bookFormat',

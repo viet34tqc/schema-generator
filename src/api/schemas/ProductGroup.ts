@@ -42,23 +42,19 @@ export default [
         label: 'SKU',
         id: 'sku',
         show: true,
-        std: '{{ product.variants.sku }}',
         tooltip:
           'The Stock Keeping Unit (SKU), i.e. a merchant-specific identifier for a product or service, or the product to which the offer refers.',
       },
       {
         ...commonProperties.name,
-        std: '{{ product.variants.name }}',
         tooltip: 'The name of the product variant.',
       },
       {
         ...commonProperties.description,
-        std: '{{ product.variants.description }}',
         tooltip: 'A description of the product variant.',
       },
       {
         ...commonProperties.image,
-        std: '{{ product.variants.image }}',
         tooltip: 'An image of the product variant.',
       },
       {
@@ -77,20 +73,17 @@ export default [
             id: 'name',
             label: 'Name',
             required: true,
-            std: '{{ product.variants.brand }}',
           },
         ],
       },
       {
         id: 'color',
         label: 'Color',
-        std: '{{ product.variants.color }}',
         tooltip: 'The color of the product variant.',
       },
       {
         id: 'size',
         label: 'Size',
-        std: '{{ product.variants.size }}',
         tooltip: 'The size of the product variant.',
       },
       {
@@ -115,12 +108,10 @@ export default [
             label: 'Price',
             required: true,
             tooltip: 'The offer price of a product',
-            std: '{{ product.variants.price }}',
           },
           {
             id: 'priceCurrency',
             label: 'Price currency',
-            std: '{{ product.variants.currency }}',
             required: true,
           },
           {
@@ -129,7 +120,6 @@ export default [
             type: 'Date',
             tooltip:
               'The date (in ISO 8601 date format) after which the price will no longer be available',
-            std: '{{ product.variants.sale_to }}',
           },
           {
             id: 'availability',
@@ -169,7 +159,6 @@ export default [
                 id: 'name',
                 label: 'Name',
                 required: true,
-                std: '{{ site.name }}',
               },
             ],
           },
@@ -180,7 +169,6 @@ export default [
   {
     label: 'Product group ID',
     id: 'productGroupID',
-    std: '{{ product.sku }}',
     required: true,
     tooltip: 'Indicates a textual identifier for a ProductGroup.',
   },
@@ -202,7 +190,6 @@ export default [
   },
   {
     ...commonProperties.url,
-    std: '{{ product.url }}',
     tooltip: 'URL of the product group.',
   },
   {
@@ -377,7 +364,6 @@ export default [
         label: 'Rating value',
         required: true,
         tooltip: 'The rating for the content.',
-        std: '{{ product.rating }}',
       },
       {
         id: 'bestRating',
@@ -395,13 +381,11 @@ export default [
         id: 'ratingCount',
         label: 'Rating count',
         tooltip: 'The count of total number of ratings.',
-        std: '{{ product.review_count }}',
       },
       {
         id: 'reviewCount',
         label: 'Review count',
         tooltip: 'The count of total number of reviews.',
-        std: '{{ product.review_count }}',
       },
     ],
   },
@@ -463,7 +447,6 @@ export default [
         id: 'url',
         label: 'URL',
         tooltip: 'URL of the product offer.',
-        std: '{{ product.url }}',
       },
       {
         id: 'seller',
@@ -481,7 +464,6 @@ export default [
             id: 'name',
             label: 'Name',
             required: true,
-            std: '{{ site.name }}',
           },
         ],
       },

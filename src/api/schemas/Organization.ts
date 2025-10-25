@@ -26,7 +26,6 @@ export default [
     id: 'logo',
     label: 'Logo',
     type: 'Image',
-    std: '{{ site.logo }}',
     tooltip: 'An associated logo.',
   },
   {

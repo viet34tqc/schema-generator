@@ -14,7 +14,6 @@ export default [
     label: 'Item reviewed',
     required: true,
     tooltip: 'The organization that is being rated.',
-    std: '{{ schemas.organization }}',
   },
   {
     id: 'ratingCount',
@@ -25,13 +24,15 @@ export default [
   {
     id: 'ratingValue',
     label: 'Rating value',
-    tooltip: 'A numerical quality rating for the organization, either a number, fraction, or percentage (for exp. "4", "60%", or "6 / 10").',
+    tooltip:
+      'A numerical quality rating for the organization, either a number, fraction, or percentage (for exp. "4", "60%", or "6 / 10").',
     required: true,
   },
   {
     id: 'reviewCount',
     label: 'Review count',
-    tooltip: 'Specifies the number of people who provided a review with or without an accompanying rating.',
+    tooltip:
+      'Specifies the number of people who provided a review with or without an accompanying rating.',
     required: true,
   },
   {

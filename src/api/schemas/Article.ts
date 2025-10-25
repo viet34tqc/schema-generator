@@ -63,13 +63,11 @@ export default [
   },
   {
     ...commonProperties.name,
-    std: '{{ post.title }}',
     tooltip: 'The name of the article.',
   },
   {
     ...commonProperties.url,
     required: true,
-    std: '{{ post.url }}',
   },
   {
     label: 'Headline',
@@ -77,7 +75,6 @@ export default [
     type: 'Text',
     required: true,
     tooltip: 'The headline of the article. Headlines should not exceed 110 characters.',
-    std: '{{ post.title }}',
   },
   {
     ...commonProperties.description,
@@ -87,19 +84,16 @@ export default [
     id: 'author',
     label: 'Author',
     tooltip: 'The author of the content.',
-    std: '{{ schemas.person }}',
     required: true,
   },
   {
     ...commonProperties.datePublished,
     required: true,
     tooltip: 'The date and time the article was most recently modified, in ISO 8601 format',
-    std: '{{ post.date }}',
   },
   {
     ...commonProperties.dateModified,
     tooltip: 'The date and time the article was first published, in ISO 8601 format',
-    std: '{{ post.modified_date }}',
   },
   {
     label: 'Comment count',
@@ -107,7 +101,6 @@ export default [
     type: 'Text',
     required: true,
     tooltip: 'The number of comments',
-    std: '{{ post.comment_count }}',
   },
   {
     label: 'Word count',
@@ -115,7 +108,6 @@ export default [
     type: 'Text',
     required: true,
     tooltip: 'The number of words in the text of the Article',
-    std: '{{ post.word_count }}',
   },
   {
     label: 'Keywords',
@@ -124,7 +116,6 @@ export default [
     required: true,
     tooltip:
       'Tags used to describe this content. Multiple entries in a keywords list are typically delimited by commas',
-    std: '{{ post.tags }}',
   },
   {
     label: 'Sections',
@@ -133,7 +124,6 @@ export default [
     required: true,
     tooltip:
       'Articles may belong to one or more sections in a magazine or newspaper, such as Sports, Lifestyle, etc',
-    std: '{{ post.categories }}',
   },
   {
     ...commonProperties.image,
