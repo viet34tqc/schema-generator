@@ -177,35 +177,3 @@ All data is stored in the browser's localStorage:
 1. Create a new component in `src/components/Fields/`
 2. Export it from the field components
 3. The field type will be automatically available
-
-### Customizing Styles
-
-The application uses Tailwind CSS. You can:
-
-- Modify `tailwind.config.js` for theme customization
-- Add custom CSS classes in `src/styles/index.css`
-- Use Tailwind utility classes in components
-
-## Browser Support
-
-- Chrome 90+
-- Firefox 88+
-- Safari 14+
-- Edge 90+
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## License
-
-MIT License - see LICENSE file for details
-
-## Credits
-
-Based on the WordPress Slim SEO Schema plugin by eLightUp team.
-Converted to standalone React application with modern tooling and practices.
